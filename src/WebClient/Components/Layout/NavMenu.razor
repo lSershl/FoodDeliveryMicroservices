@@ -1,0 +1,37 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Доставка еды</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Главная
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="catalog">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Меню
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="basket">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Корзина
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="my-orders">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Мои заказы
+            </NavLink>
+        </div>
+
+    </nav>
+</div>
+

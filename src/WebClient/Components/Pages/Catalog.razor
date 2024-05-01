@@ -1,0 +1,29 @@
+﻿@page "/catalog"
+@inherits CatalogBase
+
+<h4 style = "margin-left: 40px;">Меню</h4>
+
+<div>
+    <div class="grid">
+    @foreach (var item in catalogItems!)
+    {
+        <div class="grid-item">
+            <div class="wrapper">
+                <div class="box header">
+                    <label>@item.Name</label>
+                </div>
+                <div class="box sidebar">
+                    <img style="max-height:200px; max-width:300px;" src="@item.ImageUrl" />
+                </div>
+                <div class="box content">
+                    <label>@item.Description</label>
+                </div>
+                <div class="box footer">
+                    <label style="align-content:flex-start;">Цена: @item.Price руб</label>
+                    <button class="btn btn-primary" @onclick="() => AddToBasket(item)">Добавить в корзину</button>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+</div>

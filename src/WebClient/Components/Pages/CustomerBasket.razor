@@ -1,0 +1,58 @@
+﻿@page "/basket"
+@inherits CustomerBasketBase
+
+<h4 style="margin-left: 40px;">Корзина</h4>
+
+<div>
+    @if (@basketItems.Count == 0)
+    {
+        <h4 style="margin: 40px;">Сейчас ваша корзина пуста!</h4>
+    }
+    else
+    {
+        <div class="grid">
+            @foreach (var item in basketItems)
+            {
+                <div class="grid-item">
+                    <div class="wrapper">
+                        <div class="box header">
+                            <label>@item.Name</label>
+                        </div>
+                        <div class="box sidebar">
+                            <img style="max-height:200px; max-width:300px;" src="@item.ImageUrl" />
+                        </div>
+                        <div class="box content">
+                            <label style="align-content:flex-start;">Цена: @item.Price руб</label>
+                            @if (item.Quantity > 0)
+                            {
+                                <button class="btn btn-secondary" @onclick="() => RemoveQuantityAndSaveBasketChanges(item.Id)">-</button>
+                            }
+                            else
+                            {
+                                <button disabled class="btn btn-secondary">-</button>
+                            }
+                            <input disabled style="max-width: 50px; " @bind="@item.Quantity" />
+                            @if (item.Quantity < 100)
+                            {
+                                <button class="btn btn-secondary" @onclick="() => AddQuantityAndSaveBasketChanges(item.Id)">+</button>
+                            }
+                            else
+                            {
+                                <button disabled class="btn btn-secondary">+</button>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="submit-order">
+            <label style="font-size: 150%;">Итог: </label>
+            <label style="font-size: 150%;">@summary руб</label>
+            <br />
+            <button style="margin-top: 10px;" class="btn btn-primary">Оформить заказ</button>
+            <br />
+            <button style="margin-top: 10px;" class="btn btn-primary" @onclick="ClearBasket">Очистить корзину</button>
+        </div>
+    }
+</div>

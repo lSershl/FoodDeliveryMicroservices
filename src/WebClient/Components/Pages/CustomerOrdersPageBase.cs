@@ -2,7 +2,7 @@
 
 namespace WebClient.Components.Pages
 {
-    public class CustomerOrdersBase : ComponentBase
+    public class CustomerOrdersPageBase : ComponentBase
     {
     }
 }

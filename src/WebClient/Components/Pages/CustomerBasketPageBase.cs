@@ -5,7 +5,7 @@ using WebClient.Services;
 
 namespace WebClient.Components.Pages
 {
-    public class CustomerBasketBase : ComponentBase
+    public class CustomerBasketPageBase : ComponentBase
     {
         [Inject]
         public required BasketService BasketService { get; set; }

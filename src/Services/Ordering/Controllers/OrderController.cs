@@ -46,18 +46,18 @@ namespace Ordering.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(Guid id, UpdateOrderDto updateItemDto)
+        public async Task<IActionResult> PutAsync(Guid id, UpdateOrderDto updateOrderDto)
         {
             var existingOrder = await _repository.GetAsync(id);
             if (existingOrder is null)
             {
                 return NotFound();
             }
-            existingOrder.Address = updateItemDto.Address;
-            existingOrder.Quantity = updateItemDto.Quantity;
+            existingOrder.Address = updateOrderDto.Address;
+            existingOrder.Quantity = updateOrderDto.Quantity;
             await _repository.UpdateAsync(existingOrder);
             await _publishEndpoint.Publish(new OrderUpdated(existingOrder.Id, existingOrder.Address, existingOrder.Quantity, existingOrder.CreatedDate));
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -70,7 +70,7 @@ namespace Ordering.Controllers
             }
             await _repository.RemoveAsync(item.Id);
             await _publishEndpoint.Publish(new OrderDeleted(id));
-            return NoContent();
+            return Ok();
         }
     }
 }

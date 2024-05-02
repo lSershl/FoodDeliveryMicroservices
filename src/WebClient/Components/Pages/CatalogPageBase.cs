@@ -5,7 +5,7 @@ using WebClient.Models;
 
 namespace WebClient.Components.Pages
 {
-    public class CatalogBase : ComponentBase
+    public class CatalogPageBase : ComponentBase
     {
         [Inject]
         public required CatalogService CatalogService { get; set; }

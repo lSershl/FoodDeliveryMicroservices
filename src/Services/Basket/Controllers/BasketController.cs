@@ -1,7 +1,6 @@
 ﻿using Basket.Data;
 using Basket.Entities;
 using Basket.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.Controllers

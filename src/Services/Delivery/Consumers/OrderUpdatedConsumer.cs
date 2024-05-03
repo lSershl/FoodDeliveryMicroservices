@@ -18,16 +18,22 @@ namespace Delivery.Consumers
                 item = new Order
                 {
                     Id = message.Id,
+                    CustomerName = message.CustomerName,
+                    PhoneNumber = message.PhoneNumber,
                     Address = message.Address,
-                    Quantity = message.Quantity
+                    DeliveryTime = message.DeliveryTime,
+                    Items = message.Items,
+                    Status = message.Status,
+                    CreatedDate = message.CreatedDate
                 };
                 await _repository.CreateAsync(item);
             }
             else
             {
+                item.PhoneNumber = message.PhoneNumber;
                 item.Address = message.Address;
-                item.Quantity = message.Quantity;
-
+                item.DeliveryTime = message.DeliveryTime;
+                item.Items = message.Items;
                 await _repository.UpdateAsync(item);
             }
         }

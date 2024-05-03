@@ -24,7 +24,6 @@ namespace WebClient.Components.Pages
                 {
                     basketItems.Add(new BasketItem
                     {
-                        Id = dtoItem.Id,
                         ProductId = dtoItem.ProductId,
                         Name = dtoItem.Name,
                         Price = dtoItem.Price,
@@ -36,16 +35,16 @@ namespace WebClient.Components.Pages
             }
         }
 
-        protected void AddQuantityAndSaveBasketChanges(Guid itemId)
+        protected void AddQuantityAndSaveBasketChanges(Guid productId)
         {
-            basketItems.First(x => x.Id == itemId).Quantity++;
+            basketItems.First(x => x.ProductId == productId).Quantity++;
             SaveBasketChanges();
             CalculateSummary();
         }
 
-        protected void RemoveQuantityAndSaveBasketChanges(Guid itemId)
+        protected void RemoveQuantityAndSaveBasketChanges(Guid productId)
         {
-            basketItems.First(x => x.Id == itemId).Quantity--;
+            basketItems.First(x => x.ProductId == productId).Quantity--;
             SaveBasketChanges();
             CalculateSummary();
         }

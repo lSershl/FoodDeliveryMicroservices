@@ -36,12 +36,17 @@ namespace Ordering.Controllers
         {
             var order = new Order
             {
+                Id = Guid.NewGuid(),
+                CustomerName = createOrderDto.CustomerName,
+                PhoneNumber = createOrderDto.PhoneNumber,
                 Address = createOrderDto.Address,
-                Quantity = createOrderDto.Quantity,
-                CreatedDate = DateTimeOffset.UtcNow,
+                DeliveryTime = createOrderDto.DeliveryTime,
+                Items = createOrderDto.Items,
+                Status = "Создан",
+                CreatedDate = DateTimeOffset.UtcNow
             };
             await _repository.CreateAsync(order);
-            await _publishEndpoint.Publish(new OrderCreated(order.Id, order.Address, order.Quantity, order.CreatedDate));
+            await _publishEndpoint.Publish(new OrderCreated(order.Id, order.CustomerName, order.PhoneNumber, order.Address, order.DeliveryTime, order.Items, order.CreatedDate));
             return CreatedAtAction(nameof(GetByIdAsync), new { id = order.Id }, order);
         }
 
@@ -53,10 +58,12 @@ namespace Ordering.Controllers
             {
                 return NotFound();
             }
+            existingOrder.PhoneNumber = updateOrderDto.PhoneNumber;
             existingOrder.Address = updateOrderDto.Address;
-            existingOrder.Quantity = updateOrderDto.Quantity;
+            existingOrder.DeliveryTime = updateOrderDto.DeliveryTime;
+            existingOrder.Items = updateOrderDto.Items;
             await _repository.UpdateAsync(existingOrder);
-            await _publishEndpoint.Publish(new OrderUpdated(existingOrder.Id, existingOrder.Address, existingOrder.Quantity, existingOrder.CreatedDate));
+            await _publishEndpoint.Publish(new OrderUpdated(existingOrder.Id, existingOrder.CustomerName, existingOrder.PhoneNumber, existingOrder.Address, existingOrder.DeliveryTime, existingOrder.Items, existingOrder.CreatedDate));
             return Ok();
         }
 

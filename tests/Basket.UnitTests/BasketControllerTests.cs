@@ -4,6 +4,7 @@ using Basket.Data;
 using Basket.Entities;
 using Basket.Infrastructure;
 using FluentAssertions;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 
@@ -13,14 +14,16 @@ namespace Basket.UnitTests
     {
         private BasketController _basketController;
         private IBasketRepository _repository;
+        private IPublishEndpoint _publishEndpoint;
 
         public BasketControllerTests()
         {
             // Dependencies
             _repository = Substitute.For<IBasketRepository>();
+            _publishEndpoint = Substitute.For<IPublishEndpoint>();
 
             // System Under Test
-            _basketController = new BasketController(_repository);
+            _basketController = new BasketController(_repository, _publishEndpoint);
         }
 
         [Fact]

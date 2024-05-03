@@ -6,7 +6,7 @@ namespace Ordering.Infrastructure
     {
         public static OrderDto AsDto(this Order order)
         {
-            return new OrderDto(order.Id, order.Address, order.Quantity, order.CreatedDate);
+            return new OrderDto(order.Id, order.CustomerName, order.PhoneNumber, order.Address, order.DeliveryTime, order.Items, order.Status, order.CreatedDate);
         }
     }
 }

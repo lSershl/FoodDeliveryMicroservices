@@ -1,25 +1,20 @@
-﻿using Delivery.Entities;
-using Infrastructure;
+﻿using Infrastructure;
 using MassTransit;
+using Ordering.Entities;
 
-namespace Delivery.Consumers
+namespace Ordering.Consumers
 {
-    public class OrderCreatedConsumer(IRepository<Order> repository) : IConsumer<OrderCreated>
+    public class BasketCheckoutCompletedConsumer(IRepository<Order> repository) : IConsumer<BasketCheckoutCompleted>
     {
         private readonly IRepository<Order> _repository = repository;
-        public async Task Consume(ConsumeContext<OrderCreated> context)
+
+        public async Task Consume(ConsumeContext<BasketCheckoutCompleted> context)
         {
             var message = context.Message;
-            var item = await _repository.GetAsync(message.Id);
 
-            if (item is not null)
+            var item = new Order
             {
-                return;
-            }
-
-            item = new Order
-            {
-                Id = message.Id,
+                Id = Guid.NewGuid(),
                 CustomerName = message.CustomerName,
                 PhoneNumber = message.PhoneNumber,
                 Address = message.Address,

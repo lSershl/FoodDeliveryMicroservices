@@ -27,7 +27,7 @@ namespace Delivery.Controllers
             var deliveryDtos = deliveryEntities.Select(a =>
             {
                 var orderItem = orderEntities.Single(b => b.Id == a.OrderId);
-                return a.AsDto(orderItem.Address, orderItem.Quantity);
+                return a.AsDto(orderItem.Address, orderItem.DeliveryTime);
             });
 
             return Ok(deliveryDtos);

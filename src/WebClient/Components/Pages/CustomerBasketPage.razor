@@ -25,7 +25,7 @@
                             <label style="align-content:flex-start;">Цена: @item.Price руб</label>
                             @if (item.Quantity > 0)
                             {
-                                <button class="btn btn-secondary" @onclick="() => RemoveQuantityAndSaveBasketChanges(item.Id)">-</button>
+                                <button class="btn btn-secondary" @onclick="() => RemoveQuantityAndSaveBasketChanges(item.ProductId)">-</button>
                             }
                             else
                             {
@@ -34,7 +34,7 @@
                             <input disabled style="max-width: 50px; " @bind="@item.Quantity" />
                             @if (item.Quantity < 100)
                             {
-                                <button class="btn btn-secondary" @onclick="() => AddQuantityAndSaveBasketChanges(item.Id)">+</button>
+                                <button class="btn btn-secondary" @onclick="() => AddQuantityAndSaveBasketChanges(item.ProductId)">+</button>
                             }
                             else
                             {

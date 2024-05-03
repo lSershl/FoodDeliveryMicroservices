@@ -31,9 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog", "src\Services\Cat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket", "src\Services\Basket\Basket.csproj", "{82ED476A-9F33-44D7-80A2-195BB748DF8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.UnitTests", "tests\Basket.UnitTests\Basket.UnitTests.csproj", "{AAFA38B5-EE1B-40F1-BED1-ED94DC6BFE9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.UnitTests", "tests\Basket.UnitTests\Basket.UnitTests.csproj", "{AAFA38B5-EE1B-40F1-BED1-ED94DC6BFE9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.UnitTests", "tests\Catalog.UnitTests\Catalog.UnitTests.csproj", "{CD124B6D-C919-43C5-AB6C-6C5C64C05B6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.UnitTests", "tests\Catalog.UnitTests\Catalog.UnitTests.csproj", "{CD124B6D-C919-43C5-AB6C-6C5C64C05B6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

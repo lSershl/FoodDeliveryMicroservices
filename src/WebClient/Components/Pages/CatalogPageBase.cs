@@ -23,15 +23,23 @@ namespace WebClient.Components.Pages
         protected async void AddToBasket(CatalogItemDto item)
         {
             CustomerBasketDto basket = await BasketService.GetBasket(customerId);
-            basket.Items.Add(new BasketItem
+
+            foreach (var basketItem in basket.Items)
             {
-                Id = Guid.NewGuid(),
-                ProductId = item.Id,
-                Name = item.Name,
-                Price = item.Price,
-                ImageUrl = item.ImageUrl,
-                Quantity = 1
-            });
+                if (basketItem.ProductId == item.Id)
+                    basketItem.Quantity++;
+                else
+                {
+                    basket.Items.Add(new BasketItem
+                    {
+                        ProductId = item.Id,
+                        Name = item.Name,
+                        Price = item.Price,
+                        ImageUrl = item.ImageUrl,
+                        Quantity = 1
+                    });
+                }
+            }
             BasketService.StoreBasket(basket);
         }
     }

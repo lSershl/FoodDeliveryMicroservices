@@ -2,5 +2,5 @@
 
 namespace Infrastructure
 {
-    public record BasketCheckoutCompleted(string CustomerName, decimal TotalPrice, string Address, string PhoneNumber, string DeliveryTime, List<BasketItemDto> Items, string Status, DateTimeOffset CreatedDate);
+    public record BasketCheckoutCompleted(string CustomerName, decimal TotalPrice, string Address, string PhoneNumber, string DeliveryTime, List<BasketItemDto> Items, DateTimeOffset CreatedDate);
 }

@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Components\Pages\BasketCheckoutPage.razor" />
+    <Content Remove="Components\Pages\BasketCheckout.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Components\Pages\BasketCheckoutPage.razor" />
+    <None Include="Components\Pages\Customer\BasketCheckout.razor" />
   </ItemGroup>
 
 </Project>

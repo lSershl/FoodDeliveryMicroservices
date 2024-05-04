@@ -59,7 +59,6 @@ namespace Basket.Controllers
                 basketCheckoutDto.PhoneNumber, 
                 basketCheckoutDto.DeliveryTime, 
                 basketCheckoutDto.Items, 
-                basketCheckoutDto.Status, 
                 basketCheckoutDto.CreatedDate));
             await _basketRepository.DeleteBasketAsync(customerId);
             return Ok();

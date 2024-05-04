@@ -6,5 +6,5 @@ namespace Infrastructure
     public record OrderUpdated(Guid Id, string CustomerName, string PhoneNumber, string Address, string DeliveryTime, List<BasketItemDto> Items, DateTimeOffset CreatedDate);
     public record OrderDeleted(Guid Id);
 
-    public record BasketCheckoutCompleted(string CustomerName, decimal TotalPrice, string Address, string PhoneNumber, string DeliveryTime, List<BasketItemDto> Items, string Status, DateTimeOffset CreatedDate);
+    public record BasketCheckoutCompleted(string CustomerName, decimal TotalPrice, string Address, string PhoneNumber, string DeliveryTime, List<BasketItemDto> Items, DateTimeOffset CreatedDate);
 }

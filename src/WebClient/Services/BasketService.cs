@@ -27,5 +27,12 @@ namespace WebClient.Services
         {
             var response = await _httpClient.DeleteAsync($"{BaseUrl}/{customerId}");
         }
+
+        public async void Checkout(Guid customerId, BasketCheckoutDto basketCheckoutDto)
+        {
+            var response = await _httpClient.PostAsync($"{BaseUrl}/checkout/{customerId}",
+                Extensions.JSONSerializer.GenerateStringContent(
+                    Extensions.JSONSerializer.SerializeObj(basketCheckoutDto)));
+        }
     }
 }

@@ -1,0 +1,20 @@
+﻿@page "/checkout"
+@inherits BasketCheckoutBase
+
+<h3>Подтверждение и оплата заказа</h3>
+
+<h4 style="margin-left: 40px;">Корзина</h4>
+
+<div>
+    <div>
+
+    </div>
+    <div class="submit-order">
+        <label style="font-size: 150%;">Итог: </label>
+        <label style="font-size: 150%;">@summary руб</label>
+        <br />
+        <button style="margin-top: 10px;" class="btn btn-primary">Оформить заказ</button>
+        <br />
+        <button style="margin-top: 10px;" class="btn btn-primary" @onclick="ClearBasket">Очистить корзину</button>
+    </div>
+</div>

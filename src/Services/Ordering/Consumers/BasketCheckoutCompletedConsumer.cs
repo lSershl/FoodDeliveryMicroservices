@@ -20,7 +20,7 @@ namespace Ordering.Consumers
                 Address = message.Address,
                 DeliveryTime = message.DeliveryTime,
                 Items = message.Items,
-                Status = message.Status,
+                Status = "Created",
                 CreatedDate = message.CreatedDate
             };
 

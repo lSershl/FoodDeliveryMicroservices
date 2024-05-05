@@ -46,11 +46,10 @@
                 </div>
             }
         </div>
-        <div>
-            <label style="font-size: 150%;">Итог: </label>
-            <label style="font-size: 150%;">@summary руб</label>
+        <div style="margin-left: 40px;">
+            <label style="font-size: 150%;">Итог: @summary руб</label>
             <br />
-            <button style="margin-top: 10px;" class="btn btn-primary">Оформить заказ</button>
+            <button style="margin-top: 10px;" class="btn btn-primary" @onclick="GoToCheckout">Оформить заказ</button>
             <br />
             <button style="margin-top: 10px;" class="btn btn-primary" @onclick="ClearBasket">Очистить корзину</button>
         </div>

@@ -5,5 +5,17 @@ namespace Basket.Infrastructure
 {
     public record BasketItemDto(Guid ProductId, string ProductName,[Range(0, 10000)] decimal Price,[Range(0, 100)] int Quantity, string PictureUrl);
     public record CustomerBasketDto(Guid CustomerId, List<BasketItem> Items);
-    public record BasketCheckoutDto(Guid CustomerId, decimal TotalPrice, string CustomerName, string PhoneNumber, string Address, string DeliveryTime, List<BasketItemDto> Items, string Status, DateTimeOffset CreatedDate);
+    public record BasketCheckoutDto(
+        decimal TotalPrice,
+        [Required] string CustomerName,
+        [Required] string PhoneNumber,
+        [Required] string Address,
+        [Required] string DeliveryTime,
+        string? Email,
+        [Required] string CardName,
+        [Required] string CardNumber,
+        [Required] string Expiration,
+        [Required] string Cvv,
+        List<BasketItem> Items,
+        DateTimeOffset CreatedDate);
 }

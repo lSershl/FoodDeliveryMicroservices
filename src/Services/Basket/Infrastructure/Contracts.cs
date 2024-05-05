@@ -1,4 +1,5 @@
-﻿using Basket.Infrastructure;
+﻿using Basket.Entities;
+using Basket.Infrastructure;
 
 namespace Infrastructure
 {

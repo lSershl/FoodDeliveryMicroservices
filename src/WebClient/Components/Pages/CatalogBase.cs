@@ -24,20 +24,35 @@ namespace WebClient.Components.Pages
         {
             CustomerBasketDto basket = await BasketService.GetBasket(customerId);
 
-            foreach (var basketItem in basket.Items)
+            if (basket.Items.Count == 0)
             {
-                if (basketItem.ProductId == item.Id)
-                    basketItem.Quantity++;
-                else
+                basket.Items.Add(new BasketItem
                 {
-                    basket.Items.Add(new BasketItem
+                    ProductId = item.Id,
+                    Name = item.Name,
+                    Price = item.Price,
+                    ImageUrl = item.ImageUrl,
+                    Quantity = 1
+                });
+            }
+            else
+            {
+                foreach (var basketItem in basket.Items)
+                {
+
+                    if (basketItem.ProductId == item.Id)
+                        basketItem.Quantity++;
+                    else
                     {
-                        ProductId = item.Id,
-                        Name = item.Name,
-                        Price = item.Price,
-                        ImageUrl = item.ImageUrl,
-                        Quantity = 1
-                    });
+                        basket.Items.Add(new BasketItem
+                        {
+                            ProductId = item.Id,
+                            Name = item.Name,
+                            Price = item.Price,
+                            ImageUrl = item.ImageUrl,
+                            Quantity = 1
+                        });
+                    }
                 }
             }
             BasketService.StoreBasket(basket);

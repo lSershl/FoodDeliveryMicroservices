@@ -49,7 +49,7 @@ namespace Basket.Controllers
             return BadRequest("Не удалось очистить корзину");
         }
 
-        [HttpPost("/checkout/{customerId}")]
+        [HttpPost("checkout/{customerId}")]
         public async Task<IActionResult> Checkout(Guid customerId, BasketCheckoutDto basketCheckoutDto)
         {
             await _publishEndpoint.Publish(new BasketCheckoutCompleted(
@@ -58,7 +58,7 @@ namespace Basket.Controllers
                 basketCheckoutDto.Address, 
                 basketCheckoutDto.PhoneNumber, 
                 basketCheckoutDto.DeliveryTime, 
-                basketCheckoutDto.Items, 
+                basketCheckoutDto.Items.AsDto(), 
                 basketCheckoutDto.CreatedDate));
             await _basketRepository.DeleteBasketAsync(customerId);
             return Ok();

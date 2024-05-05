@@ -1,20 +1,73 @@
 ﻿@page "/checkout"
 @inherits BasketCheckoutBase
 
-<h3>Подтверждение и оплата заказа</h3>
+<h3 style="margin-left: 20px;">Подтверждение и оплата заказа</h3>
 
-<h4 style="margin-left: 40px;">Корзина</h4>
-
-<div>
-    <div>
-
-    </div>
-    <div class="submit-order">
-        <label style="font-size: 150%;">Итог: </label>
-        <label style="font-size: 150%;">@summary руб</label>
-        <br />
-        <button style="margin-top: 10px;" class="btn btn-primary">Оформить заказ</button>
-        <br />
-        <button style="margin-top: 10px;" class="btn btn-primary" @onclick="ClearBasket">Очистить корзину</button>
+<div class="h-100 d-flex flex-column align-items-left justify-content-left ">
+    <div class="row formStyle p-0">
+        <div class="col-12 col-md-8 p-1">
+            <div class="col-lg-12 col-md-8 p-4">
+                <h3>Сумма заказа: @totalPrice рублей</h3>
+            </div>
+            <EditForm Model="basketCheckoutModel" OnValidSubmit="ConfirmCheckout">
+                <DataAnnotationsValidator />
+                <div class="col-12 col-md-8 p-4">
+                    <h4 class="mb-2">Введите данные для доставки и оплаты</h4>
+                    <div class="mb-3">
+                        <label class="form-label" for="customer_name">Имя</label>
+                        <InputText class="form-control" id="customer_name" placeholder="Введите имя" @bind-Value="basketCheckoutModel!.CustomerName" />
+                        <ValidationMessage For="@(() => basketCheckoutModel.CustomerName)" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="address">Адрес доставки</label>
+                        <InputText class="form-control" id="address" placeholder="Введите адрес" @bind-Value="basketCheckoutModel!.Address" />
+                        <ValidationMessage For="@(() => basketCheckoutModel.CustomerName)" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="phone_number">Номер телефона</label>
+                        <InputText class="form-control" id="phone_number" placeholder="+78005553535" @bind-Value="basketCheckoutModel!.PhoneNumber" />
+                        <ValidationMessage For="@(() => basketCheckoutModel!.PhoneNumber)" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="delivery_time">Выберите время доставки</label>
+                        <InputSelect class="form-select" id="delivery_time" @bind-Value="basketCheckoutModel!.DeliveryTime">
+                            @foreach (var time in deliveryTimeList!)
+                            {
+                                <option value="@time">@time</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Электронная почта</label>
+                        <InputText class="form-control" id="email" placeholder="sample@gmail.com" @bind-Value="basketCheckoutModel!.Email" />
+                    </div>
+                </div>
+                <div class="col-12 col-md-8 p-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="card_name">Имя владельца карты</label>
+                        <InputText class="form-control" id="card_name" placeholder="IVAN IVANOV" @bind-Value="basketCheckoutModel!.CardName" />
+                        <ValidationMessage For="@(() => basketCheckoutModel!.CardName)" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="card_number">Номер карты</label>
+                        <InputText class="form-control" id="card_number" placeholder="0000 0000 0000 0000" @bind-Value="basketCheckoutModel!.CardNumber" />
+                        <ValidationMessage For="@(() => basketCheckoutModel!.CardNumber)" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="expiration">Срок действия карты</label>
+                        <InputText class="form-control" id="expiration" placeholder="MM/YY" @bind-Value="basketCheckoutModel!.Expiration" />
+                        <ValidationMessage For="@(() => basketCheckoutModel!.Expiration)" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="cvv">CVV</label>
+                        <InputText class="form-control" id="cvv" @bind-Value="basketCheckoutModel!.Cvv" />
+                        <ValidationMessage For="@(() => basketCheckoutModel!.Cvv)" />
+                    </div>
+                    <div class="col-md-1 mb-1">
+                        <button class="btn btn-primary" type="submit">Оформить заказ</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
     </div>
 </div>

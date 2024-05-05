@@ -11,7 +11,7 @@ namespace Basket.Data
         public async Task<CustomerBasket?> GetBasketAsync(Guid customerId)
         {
             var basket = await _redisDb.StringGetAsync(customerId.ToString());
-            return basket.IsNull ? null : JsonSerializer.Deserialize<CustomerBasket>(basket);
+            return basket.IsNull ? null : JsonSerializer.Deserialize<CustomerBasket>(basket!);
         }
 
         public async Task<CustomerBasket> StoreBasketAsync(CustomerBasket basket)

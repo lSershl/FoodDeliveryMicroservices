@@ -70,5 +70,10 @@ namespace WebClient.Components.Pages.Customer
             BasketService.ClearBasket(customerId);
             NavigationManager.NavigateTo("/basket", true);
         }
+
+        protected void GoToCheckout()
+        {
+            NavigationManager.NavigateTo("/checkout");
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using WebClient.Infrastructure;
+﻿using WebClient.Infrastructure;
 
 namespace WebClient.Services
 {

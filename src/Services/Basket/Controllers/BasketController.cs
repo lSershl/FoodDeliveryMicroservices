@@ -53,6 +53,7 @@ namespace Basket.Controllers
         public async Task<IActionResult> Checkout(Guid customerId, BasketCheckoutDto basketCheckoutDto)
         {
             await _publishEndpoint.Publish(new BasketCheckoutCompleted(
+                customerId,
                 basketCheckoutDto.CustomerName, 
                 basketCheckoutDto.TotalPrice, 
                 basketCheckoutDto.Address, 

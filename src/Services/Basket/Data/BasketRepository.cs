@@ -8,7 +8,7 @@ namespace Basket.Data
     {
         private readonly IDatabase _redisDb = redis.GetDatabase();
         
-        public async Task<CustomerBasket?> GetBasketAsync(Guid customerId)
+        public async Task<CustomerBasket> GetBasketAsync(Guid customerId)
         {
             var basket = await _redisDb.StringGetAsync(customerId.ToString());
             return basket.IsNull ? null : JsonSerializer.Deserialize<CustomerBasket>(basket!);

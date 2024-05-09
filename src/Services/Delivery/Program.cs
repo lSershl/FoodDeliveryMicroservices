@@ -3,6 +3,7 @@ using Delivery.MongoDb;
 using MassTransit;
 using System.Reflection;
 using Delivery.Settings;
+using Delivery.Processors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,8 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddMongo().AddMongoRepository<CourierDelivery>("courierDeliveryItems").AddMongoRepository<Order>("orderItems");
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<DeliveryProcessor>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

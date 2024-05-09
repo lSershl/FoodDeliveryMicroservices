@@ -1,6 +1,8 @@
 using MassTransit;
 using Ordering.Entities;
+using Ordering.Hubs;
 using Ordering.MongoDb;
+using Ordering.Processors;
 using Ordering.Settings;
 using System.Reflection;
 
@@ -27,6 +29,10 @@ builder.Services.AddControllers(options =>
     options.SuppressAsyncSuffixInActionNames = false;
 });
 
+builder.Services.AddSignalR();
+
+builder.Services.AddScoped<OrderingProcessor>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -44,5 +50,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<RealTimeOrderStatusHub>("/order-status");
 
 app.Run();

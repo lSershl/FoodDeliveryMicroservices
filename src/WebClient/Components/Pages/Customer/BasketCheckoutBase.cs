@@ -40,7 +40,7 @@ namespace WebClient.Components.Pages.Customer
                 basketCheckoutModel.Cvv,
                 basket.Items,
                 DateTimeOffset.Now));
-            NavigationManager.NavigateTo("/my-orders");
+            NavigationManager.NavigateTo("/basket");
         }
 
         protected decimal CalculateTotalPrice(CustomerBasketDto basket)

@@ -5,6 +5,7 @@ namespace Ordering.Entities
     public class Order : IEntity
     {
         public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         public required string CustomerName { get; set; }
         public required string PhoneNumber { get; set; }
         public required string Address { get; set; }

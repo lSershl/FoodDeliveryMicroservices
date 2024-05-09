@@ -1,12 +1,14 @@
 ﻿using Infrastructure;
 using MassTransit;
 using Ordering.Entities;
+using Ordering.Processors;
 
 namespace Ordering.Consumers
 {
-    public class BasketCheckoutCompletedConsumer(IRepository<Order> repository) : IConsumer<BasketCheckoutCompleted>
+    public class BasketCheckoutCompletedConsumer(IRepository<Order> repository, OrderingProcessor orderingProcessor) : IConsumer<BasketCheckoutCompleted>
     {
         private readonly IRepository<Order> _repository = repository;
+        private readonly OrderingProcessor _orderingProcessor = orderingProcessor;
 
         public async Task Consume(ConsumeContext<BasketCheckoutCompleted> context)
         {
@@ -15,6 +17,7 @@ namespace Ordering.Consumers
             var item = new Order
             {
                 Id = Guid.NewGuid(),
+                CustomerId = message.CustomerId,
                 CustomerName = message.CustomerName,
                 PhoneNumber = message.PhoneNumber,
                 Address = message.Address,
@@ -25,6 +28,8 @@ namespace Ordering.Consumers
             };
 
             await _repository.CreateAsync(item);
+
+            await _orderingProcessor.AcceptOrder(item.Id);
         }
     }
 }

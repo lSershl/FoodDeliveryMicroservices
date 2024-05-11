@@ -9,10 +9,10 @@ namespace WebClient.Infrastructure
     {
         public static BasketItemDto AsDto(this BasketItem basketItem)
         {
-            return new BasketItemDto(basketItem.ProductId, basketItem.Name, basketItem.Price, basketItem.Quantity, basketItem.ImageUrl);
+            return new BasketItemDto(basketItem.ProductId, basketItem.Name, basketItem.Price, basketItem.Quantity, basketItem.PictureUrl);
         }
 
-        public class JSONSerializer
+        public static class JSONSerializer
         {
             public static string SerializeObj(object obj) => JsonSerializer.Serialize(obj, JsonOptions());
             public static T DeserializeJsonString<T>(string jsonString) => JsonSerializer.Deserialize<T>(jsonString, JsonOptions())!;

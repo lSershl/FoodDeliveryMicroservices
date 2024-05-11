@@ -51,6 +51,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<RealTimeOrderStatusHub>("/order-status");
+app.MapHub<RealTimeOrderStatusHub>("get-status");
 
 app.Run();

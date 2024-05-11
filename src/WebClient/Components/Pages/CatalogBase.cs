@@ -2,6 +2,7 @@
 using WebClient.Infrastructure;
 using WebClient.Services;
 using WebClient.Models;
+using WebClient.Components.Pages.Customer;
 
 namespace WebClient.Components.Pages
 {
@@ -14,48 +15,51 @@ namespace WebClient.Components.Pages
 
         protected IEnumerable<CatalogItemDto>? catalogItems = new List<CatalogItemDto>();
         protected Guid customerId = Guid.Parse("11a4eb82-356d-421d-9d97-2cbb73881111"); // hardcoded customerId, later will be passed as part of auth token
+        protected CustomerBasket currentBasket = new();
 
         protected override async Task OnInitializedAsync()
         {
             catalogItems = await CatalogService.GetCatalogItems();
+
+            var storedBasket = await BasketService.GetBasket(customerId);
+            currentBasket.CustomerId = customerId;
+
+            if (storedBasket.Items.Count == 0)
+                return;
+            else
+            {
+                foreach (var item in storedBasket.Items)
+                {
+                    currentBasket.Items!.Add(item);
+                }
+            }
         }
 
-        protected async void AddToBasket(CatalogItemDto item)
+        protected void AddToBasket(CatalogItemDto catalogItem)
         {
-            CustomerBasketDto basket = await BasketService.GetBasket(customerId);
-
-            if (basket.Items.Count == 0)
+            BasketItem newItem = new BasketItem
             {
-                basket.Items.Add(new BasketItem
-                {
-                    ProductId = item.Id,
-                    Name = item.Name,
-                    Price = item.Price,
-                    ImageUrl = item.ImageUrl,
-                    Quantity = 1
-                });
+                ProductId = catalogItem.Id,
+                Name = catalogItem.Name,
+                Price = catalogItem.Price,
+                PictureUrl = catalogItem.PictureUrl,
+                Quantity = 1
+            };
+
+            if (currentBasket.Items!.Count == 0)
+            {
+                currentBasket.Items!.Add(newItem);
+                BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items!));
             }
             else
             {
-                foreach (var basketItem in basket.Items)
-                {
-
-                    if (basketItem.ProductId == item.Id)
-                        basketItem.Quantity++;
-                    else
-                    {
-                        basket.Items.Add(new BasketItem
-                        {
-                            ProductId = item.Id,
-                            Name = item.Name,
-                            Price = item.Price,
-                            ImageUrl = item.ImageUrl,
-                            Quantity = 1
-                        });
-                    }
-                }
+                var item = currentBasket.Items!.FirstOrDefault(x => x.ProductId == newItem.ProductId, null);
+                if (item is null)
+                    currentBasket.Items!.Add(newItem);
+                else
+                    currentBasket.Items.First(x => x.ProductId == newItem.ProductId).Quantity++;
+                BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items));
             }
-            BasketService.StoreBasket(basket);
         }
     }
 }

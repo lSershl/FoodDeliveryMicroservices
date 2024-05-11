@@ -20,6 +20,4 @@ app.UseRateLimiter();
 
 app.MapReverseProxy();
 
-//app.MapGet("/", () => "Hello World!");
-
 app.Run();

@@ -1,12 +1,12 @@
 ﻿@page "/basket"
 @inherits BasketBase
 
-<h4 style="margin-left: 40px;">Корзина</h4>
+<h3 style="margin-left: 30px;">Корзина</h3>
 
 <div>
     @if (@basketItems.Count == 0)
     {
-        <h4 style="margin: 40px;">Сейчас ваша корзина пуста!</h4>
+        <h4 style="margin: 30px;">Сейчас ваша корзина пуста!</h4>
     }
     else
     {
@@ -19,7 +19,7 @@
                             <label>@item.Name</label>
                         </div>
                         <div class="box sidebar">
-                            <img style="max-height:200px; max-width:300px;" src="@item.ImageUrl" />
+                            <img style="max-height:200px; max-width:200px;" src="@item.PictureUrl" />
                         </div>
                         <div class="box content">
                             <label style="align-content:flex-start;">Цена: @item.Price руб</label>

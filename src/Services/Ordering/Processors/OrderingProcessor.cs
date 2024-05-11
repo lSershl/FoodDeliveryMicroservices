@@ -16,7 +16,7 @@ namespace Ordering.Processors
             newOrder.Status = "Принят";
             await _repository.UpdateAsync(newOrder);
 
-            Task.Delay(3000).Wait(); // Simulate latency while registering a new order from customer
+            Task.Delay(10000).Wait(); // Simulate latency while registering a new order from customer
 
             await PrepareOrder(orderId);
 
@@ -29,7 +29,7 @@ namespace Ordering.Processors
             order.Status = "Готовим";
             await _repository.UpdateAsync(order);
 
-            Task.Delay(5000).Wait(); // Simulate food cooking process
+            Task.Delay(10000).Wait(); // Simulate food cooking process
         }
 
         private async Task SendOrderToDelivery(Guid orderId)

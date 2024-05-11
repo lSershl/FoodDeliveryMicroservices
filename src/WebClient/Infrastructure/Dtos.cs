@@ -3,9 +3,9 @@ using WebClient.Models;
 
 namespace WebClient.Infrastructure
 {
-    public record CatalogItemDto(Guid Id, string Name, string Description, string ImageUrl, decimal Price);
+    public record CatalogItemDto(Guid Id, string Name, string Description, string PictureUrl, decimal Price);
     public record OrderDto(Guid Id, string CustomerName, string PhoneNumber, string Address, string DeliveryTime, List<BasketItemDto> Items, string Status, DateTimeOffset CreatedDate);
-    public record BasketItemDto(Guid ProductId, string Name, decimal Price, [Range(0, 100)] int Quantity, string ImageUrl);
+    public record BasketItemDto(Guid ProductId, string ProductName, decimal Price, [Range(0, 100)] int Quantity, string PictureUrl);
     public record CustomerBasketDto(Guid CustomerId, List<BasketItem> Items);
     public record BasketCheckoutDto(
         decimal TotalPrice,

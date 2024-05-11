@@ -17,22 +17,31 @@ namespace WebClient.Components.Pages.Customer
 
         protected override async Task OnInitializedAsync()
         {
-            var customerBasket = await BasketService.GetBasket(customerId);
-            if (customerBasket.Items.Count > 0)
+            try
             {
-                foreach (var dtoItem in customerBasket.Items)
+                var customerBasket = await BasketService.GetBasket(customerId);
+                if (customerBasket.Items.Count > 0)
                 {
-                    basketItems.Add(new BasketItem
+                    foreach (var dtoItem in customerBasket.Items)
                     {
-                        ProductId = dtoItem.ProductId,
-                        Name = dtoItem.Name,
-                        Price = dtoItem.Price,
-                        Quantity = dtoItem.Quantity,
-                        ImageUrl = dtoItem.ImageUrl
-                    });
+                        basketItems.Add(new BasketItem
+                        {
+                            ProductId = dtoItem.ProductId,
+                            Name = dtoItem.Name,
+                            Price = dtoItem.Price,
+                            Quantity = dtoItem.Quantity,
+                            PictureUrl = dtoItem.PictureUrl
+                        });
+                    }
+                    CalculateSummary();
                 }
-                CalculateSummary();
             }
+            catch (Exception)
+            {
+
+                NavigationManager.Refresh();
+            }
+            
         }
 
         protected void AddQuantityAndSaveBasketChanges(Guid productId)

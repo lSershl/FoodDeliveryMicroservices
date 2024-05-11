@@ -6,7 +6,7 @@ namespace Basket.Infrastructure
     {
         public static BasketItemDto AsDto(this BasketItem basketItem)
         {
-            return new BasketItemDto(basketItem.ProductId, basketItem.Name, basketItem.Price, basketItem.Quantity, basketItem.ImageUrl);
+            return new BasketItemDto(basketItem.ProductId, basketItem.Name, basketItem.Price, basketItem.Quantity, basketItem.PictureUrl);
         }
 
         public static CustomerBasketDto AsDto(this CustomerBasket customerBasket)

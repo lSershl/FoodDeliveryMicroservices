@@ -10,7 +10,7 @@ namespace Ordering.Hubs
         public async Task GetOrderStatus(Guid orderId)
         {
             var order = await _repository.GetAsync(orderId);
-            await Clients.Caller.SendAsync("OrderStatusChanged", orderId, order.Status);
+            await Clients.Caller.SendAsync("OrderStatusUpdate", order.Status);
         }
     }
 }

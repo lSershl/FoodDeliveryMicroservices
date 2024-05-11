@@ -1,65 +1,67 @@
 ﻿@page "/my-orders"
 @inherits OrdersBase
 
-<h4 style="margin-left: 40px;">Мои заказы</h4>
+<h3 style="margin-left: 30px;">Мои заказы</h3>
 
 <div>
-    @if (ordersList is null || ordersList!.Count().Equals(0))
+    @if (customerOrders is null || customerOrders.Count().Equals(0))
     {
-        <h4 style="margin: 40px;">Список заказов пуст</h4>
+        <h4 style="margin: 30px;">Список заказов пуст</h4>
     }
     else
     {
-        @foreach (var order in ordersList!)
+        @foreach (var order in customerOrders)
         {
             @if (order.Status != "Доставлен")
             {
-                <div>
-                    <h3>Статус заказа: @order.Status</h3>
-                </div>
-                <div class="grid">
-                    @foreach (var item in order.Items)
-                    {
-                        <div class="grid-item">
-                            <div class="wrapper">
-                                <div class="box header">
-                                    <label>@item.Name</label>
-                                </div>
-                                <div class="box sidebar">
-                                    <img style="max-height:200px; max-width:300px;" src="@item.ImageUrl" />
-                                </div>
-                                <div class="box content">
-                                    <label style="align-content:flex-start;">Цена: @item.Price руб</label>
-                                    <label style="align-content:flex-start;">Количество: @item.Quantity шт</label>
+                <div style="border: dashed; margin: 10px; padding: 10px;">
+                    <h4 style="margin-left: 40px;">Статус заказа: @order.Status</h4>
+                    <div class="grid">
+                        @foreach (var item in order.Items)
+                        {
+                            <div class="grid-item">
+                                <div class="wrapper">
+                                    <div class="box header">
+                                        <label>@item.ProductName</label>
+                                    </div>
+                                    <div class="box sidebar">
+                                        <img style="max-height:200px; max-width:300px;" src="@item.PictureUrl" />
+                                    </div>
+                                    <div class="box content">
+                                        <label style="align-content:flex-start;">Цена: @item.Price руб</label>
+                                        <label style="align-content:flex-start;">Количество: @item.Quantity шт</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
             }
             else
             {
-                <div>
-                    <h3>Заказ от: @order.CreatedDate.Date.ToShortDateString()</h3>
-                </div>
-                <div class="grid">
-                    @foreach (var item in order.Items)
-                    {
-                        <div class="grid-item">
-                            <div class="wrapper">
-                                <div class="box header">
-                                    <label>@item.Name</label>
-                                </div>
-                                <div class="box sidebar">
-                                    <img style="max-height:200px; max-width:300px;" src="@item.ImageUrl" />
-                                </div>
-                                <div class="box content">
-                                    <label style="align-content:flex-start;">Цена: @item.Price руб</label>
-                                    <label style="align-content:flex-start;">Количество: @item.Quantity шт</label>
+                <div style="border: dotted; margin: 10px; padding: 10px;">
+                    <h5>Заказ от @order.CreatedDate.DateTime.ToShortDateString() в @order.CreatedDate.DateTime.ToShortTimeString()</h5>
+                    <h5>Время доставки: @order.DeliveryTime</h5>
+                    <div class="grid">
+                        @foreach (var item in order.Items)
+                        {
+                            <div class="grid-item">
+                                <div class="wrapper">
+                                    <div class="box header">
+                                        <label>@item.ProductName</label>
+                                    </div>
+                                    <div class="box sidebar">
+                                        <img style="max-height:200px; max-width:300px;" src="@item.PictureUrl" />
+                                    </div>
+                                    <div class="box content">
+                                        <label style="align-content:flex-start;">Цена: @item.Price руб</label>
+                                        <br />
+                                        <label style="align-content:flex-start;">Количество: @item.Quantity шт</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
             }
         }

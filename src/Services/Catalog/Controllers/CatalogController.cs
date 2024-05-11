@@ -48,7 +48,7 @@ namespace Catalog.Controllers
             {
                 Name = createCatalogItemDto.Name,
                 Description = createCatalogItemDto.Description,
-                ImageUrl = createCatalogItemDto.ImageUrl,
+                PictureUrl = createCatalogItemDto.PictureUrl,
                 Price = createCatalogItemDto.Price
             };
             await _repository.CreateAsync(catalogItem);
@@ -65,7 +65,7 @@ namespace Catalog.Controllers
             }
             existingCatalogItem.Name = updateCatalogItemDto.Name;
             existingCatalogItem.Description = updateCatalogItemDto.Description;
-            existingCatalogItem.ImageUrl = updateCatalogItemDto.ImageUrl;
+            existingCatalogItem.PictureUrl = updateCatalogItemDto.PictureUrl;
             existingCatalogItem.Price = updateCatalogItemDto.Price;
             await _repository.UpdateAsync(existingCatalogItem);
             return Ok();

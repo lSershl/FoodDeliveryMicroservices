@@ -19,8 +19,16 @@ namespace WebClient.Components.Pages.Customer
 
         protected override async Task OnInitializedAsync()
         {
-            var basket = await BasketService.GetBasket(customerId);
-            totalPrice = CalculateTotalPrice(basket);
+            try
+            {
+                var basket = await BasketService.GetBasket(customerId);
+                totalPrice = CalculateTotalPrice(basket);
+            }
+            catch (Exception)
+            {
+                NavigationManager.Refresh(true);
+            }
+            
         }
 
         protected async Task ConfirmCheckout()
@@ -40,7 +48,7 @@ namespace WebClient.Components.Pages.Customer
                 basketCheckoutModel.Cvv,
                 basket.Items,
                 DateTimeOffset.Now));
-            NavigationManager.NavigateTo("/basket");
+            NavigationManager.NavigateTo("/basket", true);
         }
 
         protected decimal CalculateTotalPrice(CustomerBasketDto basket)

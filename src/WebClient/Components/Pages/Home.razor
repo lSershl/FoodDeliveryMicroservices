@@ -2,4 +2,11 @@
 
 <PageTitle>Главная страница</PageTitle>
 
-<h3>Добро пожаловать в наш сервис доставки еды. Для выбора еды нажмите <a href="catalog">сюда</a></h3>
+<AuthorizeView>
+    <Authorized>
+        <h3>Добро пожаловать в наш сервис доставки еды. Для выбора еды нажмите <a href="catalog">сюда</a></h3>
+    </Authorized>
+    <NotAuthorized>
+        <h3>Вы не авторизованы. Нажмите <a href="login">сюда</a> для входа в свой профиль. </h3>
+    </NotAuthorized>
+</AuthorizeView>

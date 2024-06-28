@@ -6,10 +6,15 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="basket">Корзина</a>
-        </div>
-
+        <AuthorizeView>
+            <Authorized>
+                <div class="top-row px-4">
+                    <a href="basket">Корзина </a>
+                    <label> / </label>
+                    <a href="logout">Выйти</a>
+                </div>
+            </Authorized>
+        </AuthorizeView>
         <article class="content px-4">
             @Body
         </article>

@@ -1,5 +1,4 @@
 ﻿using Delivery.Entities;
-using static Delivery.Infrastructure.Dtos;
 
 namespace Delivery.Infrastructure
 {

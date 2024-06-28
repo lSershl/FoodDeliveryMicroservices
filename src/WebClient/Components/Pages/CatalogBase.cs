@@ -3,25 +3,43 @@ using WebClient.Infrastructure;
 using WebClient.Services;
 using WebClient.Models;
 using WebClient.Components.Pages.Customer;
+using Microsoft.AspNetCore.Components.Authorization;
+using Blazored.LocalStorage;
 
 namespace WebClient.Components.Pages
 {
     public class CatalogBase : ComponentBase
     {
+        [CascadingParameter]
+        protected Task<AuthenticationState>? authStateTask { get; init; }
         [Inject]
         public required CatalogService CatalogService { get; set; }
+        [Inject]
+        public required ILocalStorageService localStorage { get; set; }
         [Inject]
         public required BasketService BasketService { get; set; }
 
         protected IEnumerable<CatalogItemDto>? catalogItems = new List<CatalogItemDto>();
-        protected Guid customerId = Guid.Parse("11a4eb82-356d-421d-9d97-2cbb73881111"); // hardcoded customerId, later will be passed as part of auth token
+
+        // hardcoded customerId, later will be passed as part of auth token
+        //protected Guid customerId = Guid.Parse("a05a70d2-6b85-4cea-91f5-3501cf827a7f");
+        protected Guid customerId = Guid.Empty;
         protected CustomerBasket currentBasket = new();
 
         protected override async Task OnInitializedAsync()
         {
+            if (authStateTask is not null)
+            {
+                var authState = await authStateTask;
+                var user = authState.User;
+                if (user.Identity!.IsAuthenticated)
+                    customerId = Guid.Parse(user.Claims.First(x => x.Type.Contains("userdata"))!.Value);
+            }
+
             catalogItems = await CatalogService.GetCatalogItems();
 
-            var storedBasket = await BasketService.GetBasket(customerId);
+            var token = await localStorage.GetItemAsync<string>("JWTToken");
+            var storedBasket = await BasketService.GetBasket(customerId, token!);
             currentBasket.CustomerId = customerId;
 
             if (storedBasket.Items.Count == 0)
@@ -35,9 +53,9 @@ namespace WebClient.Components.Pages
             }
         }
 
-        protected void AddToBasket(CatalogItemDto catalogItem)
+        protected async void AddToBasket(CatalogItemDto catalogItem)
         {
-            BasketItem newItem = new BasketItem
+            BasketItem newItem = new()
             {
                 ProductId = catalogItem.Id,
                 Name = catalogItem.Name,
@@ -49,7 +67,7 @@ namespace WebClient.Components.Pages
             if (currentBasket.Items!.Count == 0)
             {
                 currentBasket.Items!.Add(newItem);
-                BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items!));
+                await BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items!));
             }
             else
             {
@@ -58,7 +76,7 @@ namespace WebClient.Components.Pages
                     currentBasket.Items!.Add(newItem);
                 else
                     currentBasket.Items.First(x => x.ProductId == newItem.ProductId).Quantity++;
-                BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items));
+                await BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items));
             }
         }
     }

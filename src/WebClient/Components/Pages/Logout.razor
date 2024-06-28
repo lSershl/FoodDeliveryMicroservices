@@ -1,0 +1,15 @@
+﻿@page "/logout"
+@using WebClient.States
+@inject AuthenticationStateProvider authStateProvider
+@inject ILocalStorageService localStorage
+@inject NavigationManager navManager
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await localStorage.ClearAsync();
+        customAuthStateProvider.UpdateAuthenticationState(null!);
+        navManager.NavigateTo("/Login");
+    }
+}

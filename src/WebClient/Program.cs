@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.SignalR.Client;
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using WebClient.Components;
 using WebClient.Services;
+using WebClient.States;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,11 @@ builder.Services.AddScoped(http => new HttpClient
     BaseAddress = new Uri(builder.Configuration.GetSection("GatewayAddress").Value!)
 });
 
+
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<RegisterService>();
 builder.Services.AddScoped<CatalogService>();
 builder.Services.AddScoped<BasketService>();
 builder.Services.AddScoped<OrderService>();

@@ -17,10 +17,10 @@ namespace WebClient.Models
         public string? Email { get; set; } = string.Empty;
 
         [Required (ErrorMessage = "Обязательное поле")]
-        public string CardName { get; set; } = string.Empty;
+        public string CardHolderName { get; set; } = string.Empty;
         [Required (ErrorMessage = "Обязательное поле")]
         public string CardNumber { get; set; } = string.Empty;
-        [Required (ErrorMessage = "Обязательное поле")]
+        [RegularExpression(@"(0[1-9]|1[0-2])\/[0-9]{2}", ErrorMessage = "Неправильный формат срока действия карты!")]
         public string Expiration { get; set; } = string.Empty;
         [Required (ErrorMessage = "Обязательное поле")]
         public string Cvv { get; set; } = string.Empty;

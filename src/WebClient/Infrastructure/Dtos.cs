@@ -14,10 +14,22 @@ namespace WebClient.Infrastructure
         [Required] string Address,
         [Required] string DeliveryTime, 
         string? Email,
-        [Required] string CardName,
+        [Required] string CardHolderName,
         [Required] string CardNumber,
         [Required] string Expiration,
         [Required] string Cvv,
         List<BasketItem> Items,
         DateTimeOffset CreatedDate);
+
+    public record LoginDto(string PhoneNumber, string Password);
+    public record RegisterDto(
+        [Required] string PhoneNumber,
+        [Required] string Password,
+        [Required] string Name,
+        [Required] string Address,
+        [Required] DateTime Birthday,
+        string? Email
+        );
+
+    public record CustomUserClaims(string CustomerId = null!, string Name = null!, string PhoneNumber = null!, string Address = null!, string Birthday = null!);
 }

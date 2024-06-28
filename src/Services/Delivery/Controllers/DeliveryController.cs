@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using static Delivery.Infrastructure.Dtos;
-using Delivery.Entities;
 using Delivery.Infrastructure;
+using Delivery.Entities;
 
 namespace Delivery.Controllers
 {

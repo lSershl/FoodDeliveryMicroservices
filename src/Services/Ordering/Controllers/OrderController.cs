@@ -7,21 +7,21 @@ using Ordering.Infrastructure;
 namespace Ordering.Controllers
 {
     [ApiController]
-    [Route("order")]
+    [Route("orders")]
     public class OrderController(IRepository<Order> repository, IPublishEndpoint publishEndpoint) : ControllerBase
     {
         private readonly IRepository<Order> _repository = repository;
         public readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDto>>> GetAsync()
+        [HttpGet("for_customer/{customerId}")]
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetCustomerOrdersAsync(Guid customerId)
         {
-            var items = (await _repository.GetAllAsync()).Select(a => a.AsDto());
+            var items = (await _repository.GetAllAsync()).Where(x => x.CustomerId == customerId).Select(a => a.AsDto());
             return Ok(items);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderDto>> GetByIdAsync(Guid id)
+        public async Task<ActionResult<OrderDto>> GetOrderByIdAsync(Guid id)
         {
             var item = await _repository.GetAsync(id);
             if (item is null)
@@ -47,7 +47,7 @@ namespace Ordering.Controllers
             };
             await _repository.CreateAsync(order);
             await _publishEndpoint.Publish(new OrderCreated(order.Id, order.CustomerName, order.PhoneNumber, order.Address, order.DeliveryTime, order.Items, order.CreatedDate));
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = order.Id }, order);
+            return CreatedAtAction(nameof(GetOrderByIdAsync), new { id = order.Id }, order);
         }
 
         [HttpPut("{id}")]

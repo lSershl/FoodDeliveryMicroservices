@@ -45,8 +45,8 @@
                 <div class="col-12 col-md-8 p-4">
                     <div class="mb-3">
                         <label class="form-label" for="card_name">Имя владельца карты</label>
-                        <InputText class="form-control" id="card_name" placeholder="IVAN IVANOV" @bind-Value="basketCheckoutModel!.CardName" />
-                        <ValidationMessage For="@(() => basketCheckoutModel!.CardName)" />
+                        <InputText class="form-control" id="card_name" placeholder="IVAN IVANOV" @bind-Value="basketCheckoutModel!.CardHolderName" />
+                        <ValidationMessage For="@(() => basketCheckoutModel!.CardHolderName)" />
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="card_number">Номер карты</label>

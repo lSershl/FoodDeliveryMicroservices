@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using WebClient.Infrastructure;
 using WebClient.Models;
 using WebClient.Services;
@@ -7,19 +10,34 @@ namespace WebClient.Components.Pages.Customer
 {
     public class BasketBase : ComponentBase
     {
+        [CascadingParameter]
+        protected Task<AuthenticationState>? authStateTask { get; init; }
         [Inject]
         public required BasketService BasketService { get; set; }
         [Inject]
+        public required ILocalStorageService localStorage { get; set; }
+        [Inject]
         public required NavigationManager NavigationManager { get; set; }
 
-        protected Guid customerId = Guid.Parse("11a4eb82-356d-421d-9d97-2cbb73881111"); // hardcoded customerId, later will be passed as part of auth token
+        // hardcoded customerId, later will be passed as part of auth token
+        //protected Guid customerId = Guid.Parse("a05a70d2-6b85-4cea-91f5-3501cf827a7f");
+        protected Guid customerId = Guid.Empty;
         protected List<BasketItem> basketItems = new();
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                var customerBasket = await BasketService.GetBasket(customerId);
+                if (authStateTask is not null)
+                {
+                    var authState = await authStateTask;
+                    var user = authState.User;
+                    if (user.Identity!.IsAuthenticated)
+                        customerId = Guid.Parse(user.Claims.First(x => x.Type.Contains("userdata"))!.Value);
+                }
+
+                var token = await localStorage.GetItemAsync<string>("JWTToken");
+                var customerBasket = await BasketService.GetBasket(customerId, token!);
                 if (customerBasket.Items.Count > 0)
                 {
                     foreach (var dtoItem in customerBasket.Items)
@@ -53,15 +71,25 @@ namespace WebClient.Components.Pages.Customer
 
         protected void RemoveQuantityAndSaveBasketChanges(Guid productId)
         {
-            basketItems.First(x => x.ProductId == productId).Quantity--;
+            var item = basketItems.First(x => x.ProductId == productId);
+            item.Quantity--;
+
+            if (item.Quantity == 0)
+            {
+                basketItems.Remove(item);
+            }
+            else
+            {
+                basketItems.First(x => x.ProductId == item.ProductId).Quantity--;
+            }
             SaveBasketChanges();
             CalculateSummary();
         }
 
-        protected void SaveBasketChanges()
+        protected async void SaveBasketChanges()
         {
             CustomerBasketDto changedBasket = new CustomerBasketDto(customerId, basketItems);
-            BasketService.StoreBasket(changedBasket);
+            await BasketService.StoreBasket(changedBasket);
         }
 
         protected decimal summary = 0;
@@ -74,9 +102,9 @@ namespace WebClient.Components.Pages.Customer
             }
         }
 
-        protected void ClearBasket()
+        protected async void ClearBasket()
         {
-            BasketService.ClearBasket(customerId);
+            await BasketService.ClearBasket(customerId);
             NavigationManager.NavigateTo("/basket", true);
         }
 

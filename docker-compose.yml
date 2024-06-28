@@ -18,12 +18,26 @@ services:
     hostname: rabbitmq
   redis:
     image: redis:latest
+    container_name: redis
     restart: always
     ports:
       - "6379:6379"
     volumes:
       - rediscache:/data
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=IdentityDb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5060:5432'
+    volumes:
+      - postgresdbdata:/var/lib/postgresql/data
 volumes:
   mongodbdata:
   rabbitmqdata:
   rediscache:
+  postgresdbdata:

@@ -4,7 +4,7 @@ using Delivery.Entities;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using static Delivery.Infrastructure.Dtos;
+using Delivery.Infrastructure;
 
 namespace Delivery.UnitTests
 {

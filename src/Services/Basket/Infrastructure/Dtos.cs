@@ -12,7 +12,7 @@ namespace Basket.Infrastructure
         [Required] string Address,
         [Required] string DeliveryTime,
         string? Email,
-        [Required] string CardName,
+        [Required] string CardHolderName,
         [Required] string CardNumber,
         [Required] string Expiration,
         [Required] string Cvv,

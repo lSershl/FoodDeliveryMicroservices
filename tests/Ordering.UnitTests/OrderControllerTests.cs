@@ -31,9 +31,10 @@ namespace Ordering.UnitTests
         public void GetAsync_ReturnsOk()
         {
             // Arrange
-            
+            Guid customerId = Guid.NewGuid();
+
             // Act
-            var result = _orderController.GetAsync();
+            var result = _orderController.GetCustomerOrdersAsync(customerId);
 
             // Assert
             result.Should().NotBeNull();
@@ -47,7 +48,7 @@ namespace Ordering.UnitTests
             Guid id = Guid.NewGuid();
 
             // Act
-            var result = _orderController.GetByIdAsync(id);
+            var result = _orderController.GetOrderByIdAsync(id);
 
             // Assert
             result.Should().NotBeNull();

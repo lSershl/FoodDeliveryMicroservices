@@ -1,4 +1,4 @@
-﻿using static Delivery.Infrastructure.Dtos;
+﻿using Delivery.Infrastructure;
 
 namespace Infrastructure
 {

@@ -52,7 +52,6 @@ namespace WebClient.States
                     new (ClaimTypes.UserData, claims.CustomerId),
                     new (ClaimTypes.Name, claims.Name),
                     new (ClaimTypes.MobilePhone, claims.PhoneNumber),
-                    new (ClaimTypes.StreetAddress, claims.Address),
                     new (ClaimTypes.DateOfBirth, claims.Birthday)
                 }, "JwtAuth"));
         }
@@ -68,9 +67,8 @@ namespace WebClient.States
             var customerId = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.UserData);
             var name = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.Name);
             var phoneNumber = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.MobilePhone);
-            var address = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.StreetAddress);
             var birthday = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.DateOfBirth);
-            return new CustomUserClaims(customerId!.Value, name!.Value, phoneNumber!.Value, address!.Value, birthday!.Value);
+            return new CustomUserClaims(customerId!.Value, name!.Value, phoneNumber!.Value, birthday!.Value);
         }
     }
 }

@@ -4,6 +4,11 @@
 <h4 style = "margin-left: 40px;">Меню</h4>
 
 <div>
+    <AuthorizeView Context="unauthorized_register_suggestion">
+        <NotAuthorized>
+            <h5 style="margin-left: 40px;">Чтобы добавить товары в корзину и оформить заказ, предлагаем вам <a href="register">зарегистрироваться</a></h5>
+        </NotAuthorized>
+    </AuthorizeView>
     <div class="grid">
     @foreach (var item in catalogItems!)
     {
@@ -18,10 +23,19 @@
                 <div class="box content">
                     <label>@item.Description</label>
                 </div>
-                <div class="box footer">
-                    <label style="align-content:flex-start;">Цена: @item.Price руб</label>
-                    <button class="btn btn-primary" @onclick="() => AddToBasket(item)">Добавить в корзину</button>
-                </div>
+                <AuthorizeView Context="authorized_basket_add">
+                    <Authorized>
+                        <div class="box footer">
+                            <label style="align-content:flex-start;">Цена: @item.Price руб</label>
+                            <button class="btn btn-primary" @onclick="() => AddToBasket(item)">Добавить в корзину</button>
+                        </div>
+                    </Authorized>
+                    <NotAuthorized>
+                        <div class="box footer">
+                            <label style="align-content:flex-start;">Цена: @item.Price руб</label>
+                        </div>
+                    </NotAuthorized>
+                </AuthorizeView>
             </div>
         </div>
     }

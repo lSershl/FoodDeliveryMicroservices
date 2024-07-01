@@ -29,8 +29,6 @@ namespace WebClient.Services
                 var message = await response.Content.ReadAsStringAsync();
                 throw new Exception(message);
             }
-            //var result = await response.Content.ReadAsStringAsync();
-            //return [.. Extensions.JSONSerializer.DeserializeJsonStringEnum<OrderDto>(result)];
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Identity.Controllers
 
         }
 
-        private string GenerateToken(ApplicationUser user)
+        private string GenerateToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -43,7 +43,6 @@ namespace Identity.Controllers
                 new Claim(ClaimTypes.UserData, user.CustomerId.ToString()),
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
-                new Claim(ClaimTypes.StreetAddress, user.Address),
                 new Claim(ClaimTypes.DateOfBirth, user.Birthday.Date.ToString())
             };
             var token = new JwtSecurityToken(
@@ -58,18 +57,17 @@ namespace Identity.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<ActionResult<RegisterResponse>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<ServiceResponce>> Register(RegisterDto registerDto)
         {
-            _accountRepository.RegisterUser(new ApplicationUser {
+            _accountRepository.RegisterUser(new User {
                 CustomerId = Guid.NewGuid(),
                 PhoneNumber = registerDto.PhoneNumber,
                 Password = registerDto.Password,
                 Name = registerDto.Name,
-                Address = registerDto.Address,
                 Birthday = registerDto.Birthday,
                 Email = registerDto.Email!
             });
-            return new RegisterResponse("Вы успешно зарегистрировались! Далее вам нужно будет выполнить вход");
+            return new ServiceResponce("Вы успешно зарегистрировались! Далее вам нужно будет выполнить вход");
         }
     }
 }

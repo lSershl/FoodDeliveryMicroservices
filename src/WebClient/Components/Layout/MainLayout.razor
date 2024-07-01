@@ -9,11 +9,18 @@
         <AuthorizeView>
             <Authorized>
                 <div class="top-row px-4">
-                    <a href="basket">Корзина </a>
-                    <label> / </label>
+                    <a href="basket">Корзина</a>
+                    <span></span>
                     <a href="logout">Выйти</a>
                 </div>
             </Authorized>
+            <NotAuthorized>
+                <div class="top-row px-4">
+                    <a href="login">Вход</a>
+                    <span></span>
+                    <a href="register">Регистрация</a>
+                </div>
+            </NotAuthorized>
         </AuthorizeView>
         <article class="content px-4">
             @Body

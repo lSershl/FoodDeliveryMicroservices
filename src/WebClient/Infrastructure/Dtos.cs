@@ -26,10 +26,9 @@ namespace WebClient.Infrastructure
         [Required] string PhoneNumber,
         [Required] string Password,
         [Required] string Name,
-        [Required] string Address,
-        [Required] DateTime Birthday,
+        DateTime Birthday,
         string? Email
         );
 
-    public record CustomUserClaims(string CustomerId = null!, string Name = null!, string PhoneNumber = null!, string Address = null!, string Birthday = null!);
+    public record CustomUserClaims(string CustomerId = null!, string Name = null!, string PhoneNumber = null!, string Birthday = null!);
 }

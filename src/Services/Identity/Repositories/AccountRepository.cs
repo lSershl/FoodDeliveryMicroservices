@@ -8,13 +8,13 @@ namespace Identity.Repositories
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
-        public async Task<ApplicationUser> GetUserByPhoneAsync(string phoneNumber)
+        public async Task<User> GetUserByPhoneAsync(string phoneNumber)
         {
             var user = await _dbContext.Users.FirstAsync(x => x.PhoneNumber == phoneNumber);
-            return user!;
+            return user;
         }
 
-        public void RegisterUser(ApplicationUser user)
+        public void RegisterUser(User user)
         {
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();

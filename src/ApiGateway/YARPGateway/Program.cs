@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Text;
 using Yarp.ReverseProxy.Transforms;
@@ -65,56 +62,6 @@ app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Custom JWT validation middleware
-//app.Use(async (context, next) =>
-//{
-//    if (
-//        context.Request.Path.Value!.Contains(builder.Configuration["AnonymousRequests:Catalog"]!) ||
-//        context.Request.Path.Value.Contains(builder.Configuration["AnonymousRequests:Identity"]!))
-//    {
-//        return;
-//    }
-//    var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-//    if (string.IsNullOrEmpty(token))
-//    {
-//        context.Response.StatusCode = 401;
-//        await context.Response.WriteAsync("Authorization header missing.");
-//        return;
-//    }
-
-//    try
-//    {
-//        var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-//        var jwtSecurityToken = jwtSecurityTokenHandler.ReadJwtToken(token);
-
-//        // Determine the API (audience) based on the request, and set issuer and audience values accordingly
-//        var validIssuer = builder.Configuration["Jwt:Issuer"];
-//        var validAudience = builder.Configuration["Jwt:Audience"];
-
-//        var validationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuer = true,
-//            ValidateAudience = true,
-//            ValidIssuer = validIssuer,
-//            ValidAudience = validAudience,
-//            ValidateIssuerSigningKey = true,
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
-//            ValidateLifetime = true // This checks the expiry
-//        };
-
-//        // This will throw if invalid
-//        jwtSecurityTokenHandler.ValidateToken(token, validationParameters, out _);
-//    }
-//    catch
-//    {
-//        context.Response.StatusCode = 401;
-//        await context.Response.WriteAsync("Invalid token.");
-//        return;
-//    }
-
-//    await next.Invoke();
-//});
 
 app.MapReverseProxy();
 

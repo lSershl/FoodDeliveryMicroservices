@@ -1,0 +1,46 @@
+﻿@page "/register"
+@inherits RegisterBase
+@rendermode InteractiveServer
+
+<PageTitle>Регистрация</PageTitle>
+
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <div class="col-12 col-lg-12 p-0">
+        <h3>Регистрация</h3>
+        <EditForm Model="@RegModel" OnValidSubmit="RegisterButtonClicked">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <lable class="form-label" for="phone_number">Номер телефона: </lable>
+                <InputText class="form-control" id="phone_number" @bind-Value="RegModel.PhoneNumber" style="max-width: 300px;"></InputText>
+                <ValidationMessage For="@(() => RegModel.PhoneNumber)" />
+            </div>
+            <div class="form-group mt-3">
+                <lable class="form-label" for="password">Пароль: </lable>
+                <InputText class="form-control" id="password" @bind-Value="RegModel.Password" style="max-width: 300px;"></InputText>
+                <ValidationMessage For="@(() => RegModel.Password)" />
+            </div>
+            <div class="form-group mt-3">
+                <lable class="form-label" for="confirm_password">Подтвердите пароль: </lable>
+                <InputText class="form-control" id="confirm_password" @bind-Value="RegModel.ConfirmPassword" style="max-width: 300px;"></InputText>
+                <ValidationMessage For="@(() => RegModel.ConfirmPassword)" />
+            </div>
+            <br />
+            <div class="form-group mt-3">
+                <lable class="form-label" for="name">Ваше имя: </lable>
+                <InputText class="form-control" id="name" @bind-Value="RegModel.Name" style="max-width: 300px;"></InputText>
+                <ValidationMessage For="@(() => RegModel.Name)" />
+            </div>
+            <div class="form-group mt-3">
+                <lable class="form-label" for="birthday">День рождения (нельзя изменить в будущем): </lable>
+                <InputDate class="form-control" id="birthday" @bind-Value="RegModel.Birthday" style="max-width: 300px;"></InputDate>
+            </div>
+            <div class="form-group mt-3">
+                <lable class="form-label" for="email">Электронная почта (для рассылок, необязательно): </lable>
+                <InputText class="form-control" id="email" @bind-Value="RegModel.Email" style="max-width: 300px;"></InputText>
+            </div>
+            <div class="form-group mt-3">
+                <button class="btn btn-primary" type="submit">Подтвердить</button>
+            </div>
+        </EditForm>
+    </div>
+</div>

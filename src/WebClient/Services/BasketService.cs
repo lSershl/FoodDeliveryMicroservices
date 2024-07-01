@@ -28,9 +28,6 @@ namespace WebClient.Services
                 var message = await response.Content.ReadAsStringAsync();
                 throw new Exception(message);
             }
-
-            //var result = await response.Content.ReadAsStringAsync();
-            //return Extensions.JSONSerializer.DeserializeJsonString<CustomerBasketDto>(result);
         }
 
         public async Task<ServiceResponse> StoreBasket(CustomerBasketDto customerBasketDto)

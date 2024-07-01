@@ -3,6 +3,7 @@ using System;
 using Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240630064133_ChangedEntities")]
+    partial class ChangedEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +42,6 @@ namespace Identity.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("FullAddress")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("House")
                         .IsRequired()
                         .HasColumnType("text");
@@ -60,11 +59,10 @@ namespace Identity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2d29819f-6ec7-4297-922a-36c6da163695"),
+                            Id = new Guid("b07dd4ae-fc21-49e6-ade5-afcb50d8c010"),
                             Apartment = "1",
                             City = "Братск",
-                            CustomerId = new Guid("b3cf2665-45b8-4437-8e1f-8a29b8b734fa"),
-                            FullAddress = "Братск, Советская 1-1",
+                            CustomerId = new Guid("5b7e1118-daa3-4467-b6dd-ed5199f3f070"),
                             House = "1",
                             Street = "Советская"
                         });
@@ -104,10 +102,10 @@ namespace Identity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("11cb7280-2194-419b-9104-8e820d38af9d"),
+                            Id = new Guid("3940d311-c8ab-4030-aef0-04fcb9da3cc4"),
                             CardHolderName = "IVAN IVANOV",
                             CardNumber = "1111 2222 3333 4444",
-                            CustomerId = new Guid("b3cf2665-45b8-4437-8e1f-8a29b8b734fa"),
+                            CustomerId = new Guid("5b7e1118-daa3-4467-b6dd-ed5199f3f070"),
                             Cvv = "111",
                             Expiration = "10/25"
                         });
@@ -144,8 +142,8 @@ namespace Identity.Migrations
                     b.HasData(
                         new
                         {
-                            CustomerId = new Guid("b3cf2665-45b8-4437-8e1f-8a29b8b734fa"),
-                            Birthday = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CustomerId = new Guid("5b7e1118-daa3-4467-b6dd-ed5199f3f070"),
+                            Birthday = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "test@gmail.com",
                             Name = "Test User",
                             Password = "test",

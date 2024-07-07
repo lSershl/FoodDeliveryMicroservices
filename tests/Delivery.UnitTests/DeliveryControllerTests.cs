@@ -27,32 +27,32 @@ namespace Delivery.UnitTests
         }
 
         [Fact]
-        public void GetAsync_ReturnsOk()
+        public void GetDeliveriesAsync_ReturnsOk()
         {
             // Arrange
             Guid courierId = Guid.NewGuid();
 
             // Act
-            var result = _deliveryController.GetAsync(courierId);
+            var response = _deliveryController.GetDeliveriesAsync(courierId);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<IEnumerable<DeliveryDto>>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
-        public void PostAsync_ReturnsOk()
+        public void CreateOrUpdateDeliveryAsync_ReturnsOk()
         {
             // Arrange
             var fixture = new Fixture();
             var grantOrderDto = fixture.Create<GrantOrderDto>();
 
             // Act
-            var result = _deliveryController.PostAsync(grantOrderDto);
+            var response = _deliveryController.CreateOrUpdateDeliveryAsync(grantOrderDto);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
     }
 }

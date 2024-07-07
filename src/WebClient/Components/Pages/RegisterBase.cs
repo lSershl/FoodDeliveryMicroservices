@@ -19,25 +19,29 @@ namespace WebClient.Components.Pages
 
         protected RegisterModel RegModel = new();
 
-        //[Required(AllowEmptyStrings = false, ErrorMessage = "Обязательное поле")]
-        protected string address = string.Empty;
-
         public async Task RegisterButtonClicked()
         {
-            ServiceResponse response = await _registerService.RegisterAsync(
+            var response = await _registerService.RegisterAsync(
                 new RegisterDto(
                     RegModel.PhoneNumber,
                     RegModel.Password,
                     RegModel.Name,
-                    RegModel.Birthday.ToUniversalTime(),
+                    RegModel.Birthday.ToUniversalTime().Date,
                     RegModel.Email));
 
             if (response is not null)
             {
-                await _js.InvokeVoidAsync("alert", response.Message);
+                if (response.IsSuccessful)
+                {
+                    await _js.InvokeVoidAsync("alert", response.Message);
+                    _navManager.NavigateTo("/login", forceLoad: true);
+                }
+                else
+                {
+                    await _js.InvokeVoidAsync("alert", response.Message);
+                    return;
+                }   
             }
-
-            _navManager.NavigateTo("/login", forceLoad: true);
         }
     }
 }

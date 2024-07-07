@@ -15,29 +15,25 @@ namespace Basket.Controllers
         public readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
 
         [HttpGet("{customerId}")]
-        public async Task<ActionResult<CustomerBasketDto>> GetBasket(Guid customerId)
+        public async Task<ActionResult> GetBasket(Guid customerId)
         {
             var basket = await _basketRepository.GetBasketAsync(customerId);
             if (basket is null)
             {
-                return new CustomerBasket(customerId).AsDto();
+                return Ok(new CustomerBasket(customerId).AsDto());
             }
-            return basket.AsDto();
+            return Ok(basket.AsDto());
         }
 
-        [HttpPost("{customerId}")]
-        public async Task<ActionResult<CustomerBasketDto>> StoreBasket(CustomerBasketDto customerBasketDto)
+        [HttpPost]
+        public async Task<ActionResult> StoreBasket(CustomerBasketDto customerBasketDto)
         {
-            var storedBasket = await _basketRepository.StoreBasketAsync(new CustomerBasket
-            {
-                CustomerId = customerBasketDto.CustomerId,
-                Items = customerBasketDto.Items
-            });
+            var storedBasket = await _basketRepository.StoreBasketAsync(customerBasketDto);
             if (storedBasket is null)
             {
                 return BadRequest("Не удалось сохранить корзину");
             }
-            return storedBasket.AsDto();
+            return Ok(storedBasket.AsDto());
         }
 
         [HttpDelete("{customerId}")]
@@ -50,7 +46,7 @@ namespace Basket.Controllers
         }
 
         [HttpPost("checkout/{customerId}")]
-        public async Task<IActionResult> Checkout(Guid customerId, BasketCheckoutDto basketCheckoutDto)
+        public async Task<ActionResult> Checkout(Guid customerId, BasketCheckoutDto basketCheckoutDto)
         {
             await _publishEndpoint.Publish(new BasketCheckoutCompleted(
                 customerId,
@@ -62,7 +58,7 @@ namespace Basket.Controllers
                 basketCheckoutDto.Items.AsDto(), 
                 basketCheckoutDto.CreatedDate));
             await _basketRepository.DeleteBasketAsync(customerId);
-            return Ok();
+            return Ok("Заказ успешно оформлен!");
         }
     }
 }

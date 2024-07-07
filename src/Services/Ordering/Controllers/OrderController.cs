@@ -14,25 +14,25 @@ namespace Ordering.Controllers
         public readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
 
         [HttpGet("for_customer/{customerId}")]
-        public async Task<ActionResult<IEnumerable<OrderDto>>> GetCustomerOrdersAsync(Guid customerId)
+        public async Task<ActionResult> GetCustomerOrdersAsync(Guid customerId)
         {
             var items = (await _repository.GetAllAsync()).Where(x => x.CustomerId == customerId).Select(a => a.AsDto());
             return Ok(items);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderDto>> GetOrderByIdAsync(Guid id)
+        public async Task<ActionResult> GetOrderByIdAsync(Guid id)
         {
             var item = await _repository.GetAsync(id);
             if (item is null)
             {
-                return NotFound();
+                return NotFound("Заказ не найден!");
             }
-            return item!.AsDto();
+            return Ok(item!.AsDto());
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderDto>> PostAsync(CreateOrderDto createOrderDto)
+        public async Task<ActionResult> CreateNewOrderAsync(CreateOrderDto createOrderDto)
         {
             var order = new Order
             {
@@ -51,12 +51,12 @@ namespace Ordering.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(Guid id, UpdateOrderDto updateOrderDto)
+        public async Task<ActionResult> UpdateOrderAsync(Guid id, UpdateOrderDto updateOrderDto)
         {
             var existingOrder = await _repository.GetAsync(id);
             if (existingOrder is null)
             {
-                return NotFound();
+                return NotFound("Заказ не найден!");
             }
             existingOrder.PhoneNumber = updateOrderDto.PhoneNumber;
             existingOrder.Address = updateOrderDto.Address;
@@ -64,20 +64,20 @@ namespace Ordering.Controllers
             existingOrder.Items = updateOrderDto.Items;
             await _repository.UpdateAsync(existingOrder);
             await _publishEndpoint.Publish(new OrderUpdated(existingOrder.Id, existingOrder.CustomerName, existingOrder.PhoneNumber, existingOrder.Address, existingOrder.DeliveryTime, existingOrder.Items, existingOrder.CreatedDate));
-            return Ok();
+            return Ok("Заказ обновлён");
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<ActionResult> DeleteOrderAsync(Guid id)
         {
             var item = await _repository.GetAsync(id);
             if (item is null)
             {
-                return NotFound();
+                return NotFound("Заказ не найден!");
             }
             await _repository.RemoveAsync(item.Id);
             await _publishEndpoint.Publish(new OrderDeleted(id));
-            return Ok();
+            return Ok("Заказ удалён");
         }
     }
 }

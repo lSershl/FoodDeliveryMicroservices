@@ -20,7 +20,7 @@ namespace WebClient.Services
             else
             {
                 var message = await response.Content.ReadAsStringAsync();
-                throw new Exception(message);
+                return new LoginResponse(message, null!);
             }
             
         }

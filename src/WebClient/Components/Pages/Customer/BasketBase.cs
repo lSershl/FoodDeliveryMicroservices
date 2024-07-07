@@ -77,11 +77,9 @@ namespace WebClient.Components.Pages.Customer
             if (item.Quantity == 0)
             {
                 basketItems.Remove(item);
+                NavigationManager.Refresh();
             }
-            else
-            {
-                basketItems.First(x => x.ProductId == item.ProductId).Quantity--;
-            }
+
             SaveBasketChanges();
             CalculateSummary();
         }

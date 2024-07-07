@@ -13,9 +13,8 @@ namespace Catalog.Controllers
         private readonly CatalogInitialData _initialData = initialData;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CatalogItemDto>>> GetAsync()
+        public async Task<ActionResult> GetCatalogAsync()
         {
-            //await Task.Delay(2000);
             var items = (await _repository.GetAllAsync()).Select(a => a.AsDto());
             if (items.Count() == 0)
             {
@@ -31,18 +30,18 @@ namespace Catalog.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CatalogItemDto>> GetByIdAsync(Guid id)
+        public async Task<ActionResult> GetCatalogItemByIdAsync(Guid id)
         {
             var item = await _repository.GetAsync(id);
             if (item is null)
             {
-                return NotFound();
+                return NotFound("Товар не найден!");
             }
-            return item!.AsDto();
+            return Ok(item!.AsDto());
         }
 
         [HttpPost]
-        public async Task<ActionResult<CatalogItemDto>> PostAsync(CreateCatalogItemDto createCatalogItemDto)
+        public async Task<ActionResult> PostCatalogItemAsync(CreateCatalogItemDto createCatalogItemDto)
         {
             var catalogItem = new CatalogItem
             {
@@ -52,35 +51,35 @@ namespace Catalog.Controllers
                 Price = createCatalogItemDto.Price
             };
             await _repository.CreateAsync(catalogItem);
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = catalogItem.Id }, catalogItem);
+            return CreatedAtAction(nameof(GetCatalogItemByIdAsync), new { id = catalogItem.Id }, catalogItem);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(Guid id, UpdateCatalogItemDto updateCatalogItemDto)
+        public async Task<ActionResult> UpdateCatalogItemAsync(Guid id, UpdateCatalogItemDto updateCatalogItemDto)
         {
             var existingCatalogItem = await _repository.GetAsync(id);
             if (existingCatalogItem is null)
             {
-                return NotFound();
+                return NotFound("Товар не найден!");
             }
             existingCatalogItem.Name = updateCatalogItemDto.Name;
             existingCatalogItem.Description = updateCatalogItemDto.Description;
             existingCatalogItem.PictureUrl = updateCatalogItemDto.PictureUrl;
             existingCatalogItem.Price = updateCatalogItemDto.Price;
             await _repository.UpdateAsync(existingCatalogItem);
-            return Ok();
+            return Ok("Товар сохранён");
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<ActionResult> DeleteCatalogItemAsync(Guid id)
         {
             var item = await _repository.GetAsync(id);
             if (item is null)
             {
-                return NotFound();
+                return NotFound("Товар не существует!");
             }
             await _repository.RemoveAsync(item.Id);
-            return Ok();
+            return Ok("Товар удалён");
         }
     }
 }

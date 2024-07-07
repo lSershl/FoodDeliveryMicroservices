@@ -28,76 +28,81 @@ namespace Ordering.UnitTests
         }
 
         [Fact]
-        public void GetAsync_ReturnsOk()
+        public void GetCustomerOrdersAsync_ReturnsOk()
         {
             // Arrange
             Guid customerId = Guid.NewGuid();
 
             // Act
-            var result = _orderController.GetCustomerOrdersAsync(customerId);
+            var response = _orderController.GetCustomerOrdersAsync(customerId);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<IEnumerable<OrderDto>>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
-        public void GetByIdAsync_ReturnsOk()
+        public void GetOrderByIdAsync_ReturnsOk()
         {
             // Arrange
             Guid id = Guid.NewGuid();
+            var fixture = new Fixture();
+            _repository.GetAsync(id).Returns(fixture.Create<Order>());
 
             // Act
-            var result = _orderController.GetOrderByIdAsync(id);
+            var response = _orderController.GetOrderByIdAsync(id);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<OrderDto>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
-        public void PostAsync_ReturnsOk()
+        public void CreateNewOrderAsync_ReturnsOk()
         {
             // Arrange
             var fixture = new Fixture();
             var createOrderDto = fixture.Create<CreateOrderDto>();
 
             // Act
-            var result = _orderController.PostAsync(createOrderDto);
+            var response = _orderController.CreateNewOrderAsync(createOrderDto);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<OrderDto>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(CreatedAtActionResult));
         }
 
         [Fact]
-        public void PutAsync_ReturnsOk()
+        public void UpdateOrderAsync_ReturnsOk()
         {
             // Arrange
             Guid id = Guid.NewGuid();
             var fixture = new Fixture();
             var updateOrderDto = fixture.Create<UpdateOrderDto>();
+            _repository.GetAsync(id).Returns(fixture.Create<Order>());
 
             // Act
-            var result = _orderController.PutAsync(id, updateOrderDto);
+            var response = _orderController.UpdateOrderAsync(id, updateOrderDto);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<IActionResult>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
-        public void DeleteAsync_ReturnsOk()
+        public void DeleteOrderAsync_ReturnsOk()
         {
             // Arrange
             Guid id = Guid.NewGuid();
+            var fixture = new Fixture();
+            _repository.GetAsync(id).Returns(fixture.Create<Order>());
 
             // Act
-            var result = _orderController.DeleteAsync(id);
+            var response = _orderController.DeleteOrderAsync(id);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<IActionResult>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
     }
 }

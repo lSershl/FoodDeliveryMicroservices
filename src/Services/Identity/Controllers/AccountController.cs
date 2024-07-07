@@ -20,17 +20,17 @@ namespace Identity.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<LoginResponse>> Login(LoginDto loginDto)
+        public async Task<ActionResult> Login(LoginDto loginDto)
         {
             var user = await _accountRepository.GetUserByPhoneAsync(loginDto.PhoneNumber);
             if (user is null)
-                return new LoginResponse("Пользователь не найден!");
+                return NotFound("Пользователь не найден!");
 
             if (loginDto.Password != user.Password)
-                return new LoginResponse("Неверный логин или пароль!");
+                return BadRequest("Неверный логин или пароль!");
 
             string jwtToken = GenerateToken(user);
-            return new LoginResponse("Успешный вход в систему", jwtToken);
+            return Ok(new LoginResponse("Успешный вход в систему", jwtToken));
 
         }
 
@@ -57,8 +57,15 @@ namespace Identity.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<ActionResult<ServiceResponce>> Register(RegisterDto registerDto)
+        public async Task<ActionResult> Register(RegisterDto registerDto)
         {
+            if (registerDto.PhoneNumber.IsNullOrEmpty() ||
+                registerDto.Password.IsNullOrEmpty() ||
+                registerDto.Name.IsNullOrEmpty())
+            {
+                return BadRequest("Одно или несколько полей пустые!");
+            }
+                
             _accountRepository.RegisterUser(new User {
                 CustomerId = Guid.NewGuid(),
                 PhoneNumber = registerDto.PhoneNumber,
@@ -67,7 +74,7 @@ namespace Identity.Controllers
                 Birthday = registerDto.Birthday,
                 Email = registerDto.Email!
             });
-            return new ServiceResponce("Вы успешно зарегистрировались! Далее вам нужно будет выполнить вход");
+            return Ok("Вы успешно зарегистрировались, далее нужно будет выполнить вход");
         }
     }
 }

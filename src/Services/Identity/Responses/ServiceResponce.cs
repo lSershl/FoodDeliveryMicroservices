@@ -1,4 +1,4 @@
 ﻿namespace Identity.Responses
 {
-    public record ServiceResponce(string Message = null!);
+    public record ServiceResponse(string Message = null!);
 }

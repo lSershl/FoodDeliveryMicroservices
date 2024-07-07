@@ -28,20 +28,20 @@ namespace Catalog.UnitTests
         }
 
         [Fact]
-        public void GetAsync_ReturnsOk()
+        public void GetCatalogAsync_ReturnsOk()
         {
             // Arrange
 
             // Act
-            var result = _catalogController.GetAsync();
+            var response = _catalogController.GetCatalogAsync();
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<IEnumerable<CatalogItemDto>>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
-        public void GetByIdAsync_ReturnsOk()
+        public void GetCatalogItemByIdAsync_ReturnsOk()
         {
             // Arrange
             Guid id = Guid.NewGuid();
@@ -49,56 +49,59 @@ namespace Catalog.UnitTests
             _repository.GetAsync(id).Returns(fixture.Create<CatalogItem>());
 
             // Act
-            var result = _catalogController.GetByIdAsync(id);
+            var response = _catalogController.GetCatalogItemByIdAsync(id);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<CatalogItemDto>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
-        public void PostAsync_ReturnsOk()
+        public void PostCatalogItemAsync_ReturnsOk()
         {
             // Arrange
             var fixture = new Fixture();
             var createCatalogItemDto = fixture.Create<CreateCatalogItemDto>();
 
             // Act
-            var result = _catalogController.PostAsync(createCatalogItemDto);
+            var response = _catalogController.PostCatalogItemAsync(createCatalogItemDto);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<CatalogItemDto>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(CreatedAtActionResult));
         }
 
         [Fact]
-        public void PutAsync_ReturnsOk()
+        public void UpdateCatalogItemAsync_ReturnsOk()
         {
             // Arrange
             Guid id = Guid.NewGuid();
             var fixture = new Fixture();
             var updateOrderDto = fixture.Create<UpdateCatalogItemDto>();
+            _repository.GetAsync(id).Returns(fixture.Create<CatalogItem>());
 
             // Act
-            var result = _catalogController.PutAsync(id, updateOrderDto);
+            var response = _catalogController.UpdateCatalogItemAsync(id, updateOrderDto);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<IActionResult>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
-        public void DeleteAsync_ReturnsOk()
+        public void DeleteCatalogItemAsync_ReturnsOk()
         {
             // Arrange
             Guid id = Guid.NewGuid();
+            var fixture = new Fixture();
+            _repository.GetAsync(id).Returns(fixture.Create<CatalogItem>());
 
             // Act
-            var result = _catalogController.DeleteAsync(id);
+            var response = _catalogController.DeleteCatalogItemAsync(id);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<IActionResult>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
     }
 }

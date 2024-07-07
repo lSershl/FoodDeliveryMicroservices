@@ -30,8 +30,15 @@ namespace WebClient.Components.Pages
             LoginResponse response = await _loginService.LoginAsync(new LoginDto(Login.PhoneNumber, Login.Password));
             if (response is not null)
             {
+                if (response!.Token is null)
+                {
+                    await _js.InvokeVoidAsync("alert", response.Message);
+                    return;
+                }
+
                 await _js.InvokeVoidAsync("alert", response.Message);
             }
+            
 
             await _localStorage.SetItemAsync("JWTToken", response.Token);
             var customAuthStateProvider = (CustomAuthenticationStateProvider)_authStateProvider;

@@ -15,7 +15,7 @@ namespace Identity.Controllers
 
         [HttpGet("for_customer/{customerId}")]
         [Authorize]
-        public async Task<ActionResult<List<SavedAddressDto>>> GetUserAddresses(Guid customerId)
+        public async Task<ActionResult> GetUserAddresses(Guid customerId)
         {
             List<SavedAddressDto> userAddresses = new();
             var result = await _addressRepository.GetAddressesByUserAsync(customerId);
@@ -32,7 +32,7 @@ namespace Identity.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ServiceResponce>> SaveNewAddressForUser(NewAddressDto newAddressDto)
+        public async Task<ActionResult> SaveNewAddressForUser(NewAddressDto newAddressDto)
         {
             _addressRepository.AddAddress(new Address 
             {
@@ -44,15 +44,15 @@ namespace Identity.Controllers
                 Apartment = newAddressDto.Apartment,
                 FullAddress = newAddressDto.City + ", " + newAddressDto.Street + " " + newAddressDto.House + "-" + newAddressDto.Apartment
             });
-            return new ServiceResponce("Адрес сохранён");
+            return Ok("Адрес сохранён");
         }
 
         [HttpDelete("{customerId}")]
         [Authorize]
-        public async Task<ActionResult<ServiceResponce>> DeleteSavedAddress(Guid customerId, string address)
+        public async Task<ActionResult> DeleteSavedAddress(Guid customerId, string address)
         {
             _addressRepository.RemoveAddress(customerId, address);
-            return new ServiceResponce("Адрес удалён");
+            return Ok("Адрес удалён");
         }
     }
 }

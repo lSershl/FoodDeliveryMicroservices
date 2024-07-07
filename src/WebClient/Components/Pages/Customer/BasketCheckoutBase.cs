@@ -18,8 +18,6 @@ namespace WebClient.Components.Pages.Customer
         [Inject]
         public required NavigationManager NavigationManager { get; set; }
 
-        // hardcoded customerId, later will be passed as part of auth token
-        //protected Guid customerId = Guid.Parse("a05a70d2-6b85-4cea-91f5-3501cf827a7f");
         protected Guid customerId = Guid.Empty;
         public BasketCheckoutModel? basketCheckoutModel = new BasketCheckoutModel();
         protected List<string> deliveryTimeList = new List<string> { "13:00 - 15:00", "15:00 - 17:00", "17:00 - 19:00"};

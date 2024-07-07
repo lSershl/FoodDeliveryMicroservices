@@ -9,19 +9,19 @@ namespace WebClient.Services
 
         private const string BaseUrl = "/identity-service/account/register";
 
-        public async Task<ServiceResponse> RegisterAsync(RegisterDto registerDto)
+        public async Task<RegisterResponse> RegisterAsync(RegisterDto registerDto)
         {
             var response = await _httpClient.PostAsJsonAsync($"{BaseUrl}", registerDto);
             
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
-                return result!;
+                var message = await response.Content.ReadAsStringAsync();
+                return new RegisterResponse(message, true);
             }
             else
             {
                 var message = await response.Content.ReadAsStringAsync();
-                throw new Exception(message);
+                return new RegisterResponse(message, false);
             }
         }
     }

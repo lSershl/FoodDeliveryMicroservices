@@ -35,11 +35,11 @@ namespace Basket.UnitTests
             _repository.GetBasketAsync(customerId).Returns(fixture.Create<CustomerBasket>());
 
             // Act
-            var result = _basketController.GetBasket(customerId);
+            var response = _basketController.GetBasket(customerId);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<CustomerBasketDto>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
@@ -48,13 +48,14 @@ namespace Basket.UnitTests
             // Arrange
             var fixture = new Fixture();
             var customerBasketDto = fixture.Create<CustomerBasketDto>();
+            _repository.StoreBasketAsync(customerBasketDto).Returns(fixture.Create<CustomerBasket>());
 
             // Act
-            var result = _basketController.StoreBasket(customerBasketDto);
+            var response = _basketController.StoreBasket(customerBasketDto);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult<CustomerBasketDto>>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
@@ -62,13 +63,30 @@ namespace Basket.UnitTests
         {
             // Arrange
             Guid customerId = Guid.NewGuid();
+            _repository.DeleteBasketAsync(customerId).Returns(true);
 
             // Act
-            var result = _basketController.DeleteBasket(customerId);
+            var response = _basketController.DeleteBasket(customerId);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(Task<ActionResult>));
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
+        }
+
+        [Fact]
+        public void Checkout_ReturnsOk()
+        {
+            // Arrange
+            Guid customerId = Guid.NewGuid();
+            var fixture = new Fixture();
+            var basketCheckoutDto = fixture.Create<BasketCheckoutDto>();
+
+            // Act
+            var response = _basketController.Checkout(customerId, basketCheckoutDto);
+
+            // Assert
+            response.Should().NotBeNull();
+            response.Result.Should().BeOfType(typeof(OkObjectResult));
         }
     }
 }

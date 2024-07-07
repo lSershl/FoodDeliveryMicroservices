@@ -32,7 +32,7 @@ namespace WebClient.Services
 
         public async Task<ServiceResponse> StoreBasket(CustomerBasketDto customerBasketDto)
         {
-            var response = await _httpClient.PostAsync($"{BaseUrl}/{customerBasketDto.CustomerId}", 
+            var response = await _httpClient.PostAsync($"{BaseUrl}", 
                 Extensions.JSONSerializer.GenerateStringContent(
                     Extensions.JSONSerializer.SerializeObj(customerBasketDto)));
 

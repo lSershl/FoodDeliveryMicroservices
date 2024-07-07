@@ -1,4 +1,5 @@
 ﻿using Basket.Entities;
+using Basket.Infrastructure;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -14,8 +15,13 @@ namespace Basket.Data
             return basket.IsNull ? null : JsonSerializer.Deserialize<CustomerBasket>(basket!);
         }
 
-        public async Task<CustomerBasket> StoreBasketAsync(CustomerBasket basket)
+        public async Task<CustomerBasket> StoreBasketAsync(CustomerBasketDto basketDto)
         {
+            var basket = new CustomerBasket
+            {
+                CustomerId = basketDto.CustomerId,
+                Items = basketDto.Items
+            };
             var updateOrCreateBasket = await _redisDb.StringSetAsync(basket.CustomerId.ToString(), JsonSerializer.Serialize(basket), TimeSpan.FromDays(1));
             if (updateOrCreateBasket)
                 return await GetBasketAsync(basket.CustomerId);

@@ -13,9 +13,11 @@ namespace Identity.Infrastructure
         string? Email
         );
 
-    public record SavedAddressDto(string Address);
+    public record SavedAddressDto(Guid Id, string FullAddress);
 
-    public record SavedPaymentCardDto(string PartialCardNumber);
+    public record SavedPaymentCardDto(Guid Id, string PartialCardNumber);
+
+    public record PaymentCardInfoDto(string CardNumber, string CardHolderName, string Expiration, string Cvv);
 
     public record NewAddressDto (
         [Required] Guid CustomerId,

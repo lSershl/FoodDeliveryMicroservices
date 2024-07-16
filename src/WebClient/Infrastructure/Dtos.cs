@@ -20,8 +20,24 @@ namespace WebClient.Infrastructure
         [Required] string Cvv,
         List<BasketItem> Items,
         DateTimeOffset CreatedDate);
-
+    public record SavedAddressDto(Guid Id, string FullAddress);
+    public record NewAddressDto(
+        [Required] Guid CustomerId,
+        [Required] string City,
+        [Required] string Street,
+        [Required] string House,
+        [Required] string Apartment
+        );
+    public record SavedPaymentCardDto(Guid Id, string PartialCardNumber);
+    public record NewPaymentCardDto(
+        [Required] Guid CustomerId,
+        [Required] string CardNumber,
+        [Required] string CardHolderName,
+        [Required] string Expiration,
+        [Required] string Cvv
+        );
     public record LoginDto(string PhoneNumber, string Password);
+
     public record RegisterDto(
         [Required] string PhoneNumber,
         [Required] string Password,
@@ -29,6 +45,5 @@ namespace WebClient.Infrastructure
         DateTime Birthday,
         string? Email
         );
-
     public record CustomUserClaims(string CustomerId = null!, string Name = null!, string PhoneNumber = null!, string Birthday = null!);
 }

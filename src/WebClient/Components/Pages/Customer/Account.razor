@@ -1,0 +1,21 @@
+﻿@page "/my-account"
+@inherits AccountBase
+
+<AuthorizeView>
+    <Authorized>
+        <div class="h-100 d-flex flex-column align-items-left justify-content-left" style="margin: 10px;">
+            <div class="row formStyle p-0">
+                <div class="col-12 col-md-8 p-1">
+                    <h3>Профиль</h3>
+                </div>
+                <div class="col-12 col-md-8 p-1">
+                    <h4 class="mb-2">Ваше имя: @Name</h4>
+                    <h4 class="mb-2">День рождения: @Birthday</h4>
+                </div>
+                <div class="col-12 col-md-8 p-1">
+                    <button class="btn btn-primary" @onclick="GoToOrders">Перейти к заказам</button>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>

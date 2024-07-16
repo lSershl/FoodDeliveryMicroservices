@@ -22,10 +22,14 @@ namespace Identity.Controllers
             foreach (var address in result)
             {
                 userAddresses.Add(new SavedAddressDto(
-                    address.City + " " + 
-                    address.Street + " " + 
-                    address.House + " " + 
-                    address.Apartment));
+                    address.Id,
+                    address.FullAddress));
+                //userAddresses.Add(new SavedAddressDto(
+                //    address.Id,
+                //    address.City + " " + 
+                //    address.Street + " " + 
+                //    address.House + " " + 
+                //    address.Apartment));
             }
             return Ok(userAddresses);
         }

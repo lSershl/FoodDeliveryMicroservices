@@ -14,6 +14,12 @@ namespace Identity.Repositories
             return cards;
         }
 
+        public async Task<PaymentCard> GetPaymentCardByIdAsync(Guid cardId)
+        {
+            var card = await _dbContext.SavedUserPaymentCards.FirstAsync(x => x.Id == cardId);
+            return card;
+        }
+
         public void AddPaymentCard(PaymentCard paymentCard)
         {
             _dbContext.SavedUserPaymentCards.Add(paymentCard);

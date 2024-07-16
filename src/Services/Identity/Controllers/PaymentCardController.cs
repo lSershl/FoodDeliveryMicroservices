@@ -23,9 +23,22 @@ namespace Identity.Controllers
             foreach (var card in result)
             {
                 userCards.Add(new SavedPaymentCardDto(
+                    card.Id,
                     string.Concat("****-****-****-", card.CardNumber.AsSpan(card.CardNumber.Length - 4, 4))));
             }
             return Ok(userCards);
+        }
+
+        [HttpGet("id/{cardId}")]
+        [Authorize]
+        public async Task<ActionResult> GetCardById(Guid cardId)
+        {
+            var card = await _paymentCardRepository.GetPaymentCardByIdAsync(cardId);
+            return Ok(new PaymentCardInfoDto(
+                card.CardNumber,
+                card.CardHolderName,
+                card.Expiration,
+                card.Cvv));
         }
 
         [HttpPost]

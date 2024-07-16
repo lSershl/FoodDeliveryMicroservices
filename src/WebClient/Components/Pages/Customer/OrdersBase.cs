@@ -11,39 +11,36 @@ namespace WebClient.Components.Pages.Customer
     public class OrdersBase : ComponentBase
     {
         [CascadingParameter]
-        protected Task<AuthenticationState>? authStateTask { get; init; }
+        protected Task<AuthenticationState>? AuthStateTask { get; init; }
         [Inject]
-        public required OrderService OrderService { get; set; }
+        public required OrderService OrderService { get; init; }
         [Inject]
-        public required ILocalStorageService localStorage { get; set; }
+        public required ILocalStorageService LocalStorage { get; init; }
         [Inject]
-        public required NavigationManager NavigationManager { get; set; }
+        public required NavigationManager NavigationManager { get; init; }
 
         protected HubConnection? _connection;
         protected readonly string BaseHubConnectionUrl = "https://localhost:7202/order-status/get-status";
-
-        // hardcoded customerId, later will be passed as part of auth token
-        //protected Guid customerId = Guid.Parse("a05a70d2-6b85-4cea-91f5-3501cf827a7f");
         
         protected Guid customerId = Guid.Empty;
         protected IEnumerable<OrderDto>? ordersDtoList;
-        protected List<CustomerOrder> customerOrders = new();
+        protected List<CustomerOrder> customerOrders = [];
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                if (authStateTask is not null)
+                if (AuthStateTask is not null)
                 {
-                    var authState = await authStateTask;
+                    var authState = await AuthStateTask;
                     var user = authState.User;
                     if (user.Identity!.IsAuthenticated)
                         customerId = Guid.Parse(user.Claims.First(x => x.Type.Contains("userdata"))!.Value);
                 }
 
-                var token = await localStorage.GetItemAsync<string>("JWTToken");
+                var token = await LocalStorage.GetItemAsync<string>("JWTToken");
                 ordersDtoList = await OrderService.GetCustomerOrders(customerId, token!);
-                if (ordersDtoList is null || ordersDtoList.Count() == 0)
+                if (ordersDtoList is null || !ordersDtoList.Any())
                     return;
                 else
                 {
@@ -59,7 +56,7 @@ namespace WebClient.Components.Pages.Customer
                             CreatedDate = orderDto.CreatedDate
                         });
                     }
-                    customerOrders = customerOrders.OrderByDescending(o => o.CreatedDate).ToList();
+                    customerOrders = [.. customerOrders.OrderByDescending(o => o.CreatedDate)];
                     var currentOrder = customerOrders.First();
                     if (currentOrder.Status == "Доставлен")
                         return;

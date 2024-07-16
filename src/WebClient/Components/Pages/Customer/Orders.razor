@@ -1,12 +1,11 @@
 ﻿@page "/my-orders"
 @inherits OrdersBase
 
-<h3 style="margin-left: 30px;">Мои заказы</h3>
-
 <div>
-    @if (customerOrders is null || customerOrders.Count().Equals(0))
+    <h3 style="margin: 10px;">Мои заказы</h3>
+    @if (customerOrders is null || !customerOrders.Any())
     {
-        <h4 style="margin: 30px;">Список заказов пуст</h4>
+        <h4 style="margin: 10px;">Список заказов пуст</h4>
     }
     else
     {
@@ -15,7 +14,7 @@
             @if (order.Status != "Доставлен")
             {
                 <div style="border: dashed; margin: 10px; padding: 10px;">
-                    <h4 style="margin-left: 40px;">Статус заказа: @order.Status</h4>
+                    <h4>Статус заказа: @order.Status</h4>
                     <div class="grid">
                         @foreach (var item in order.Items)
                         {

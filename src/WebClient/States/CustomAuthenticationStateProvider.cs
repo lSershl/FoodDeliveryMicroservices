@@ -64,10 +64,14 @@ namespace WebClient.States
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(jwtToken);
 
+            if (token.ValidTo < DateTime.Now)
+                return new CustomUserClaims();
+
             var customerId = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.UserData);
             var name = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.Name);
             var phoneNumber = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.MobilePhone);
             var birthday = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.DateOfBirth);
+
             return new CustomUserClaims(customerId!.Value, name!.Value, phoneNumber!.Value, birthday!.Value);
         }
     }

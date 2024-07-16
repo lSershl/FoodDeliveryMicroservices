@@ -19,10 +19,8 @@ namespace WebClient.Components.Pages.Customer
         [Inject]
         public required NavigationManager NavigationManager { get; set; }
 
-        // hardcoded customerId, later will be passed as part of auth token
-        //protected Guid customerId = Guid.Parse("a05a70d2-6b85-4cea-91f5-3501cf827a7f");
-        protected Guid customerId = Guid.Empty;
-        protected List<BasketItem> basketItems = new();
+        protected Guid customerId;
+        protected List<BasketItem> basketItems = [];
 
         protected override async Task OnInitializedAsync()
         {
@@ -32,8 +30,9 @@ namespace WebClient.Components.Pages.Customer
                 {
                     var authState = await authStateTask;
                     var user = authState.User;
-                    if (user.Identity!.IsAuthenticated)
+                    if (user.Identities.Any())
                         customerId = Guid.Parse(user.Claims.First(x => x.Type.Contains("userdata"))!.Value);
+                    else NavigationManager.NavigateTo("/login");
                 }
 
                 var token = await localStorage.GetItemAsync<string>("JWTToken");
@@ -86,8 +85,9 @@ namespace WebClient.Components.Pages.Customer
 
         protected async void SaveBasketChanges()
         {
+            var token = await localStorage.GetItemAsync<string>("JWTToken");
             CustomerBasketDto changedBasket = new CustomerBasketDto(customerId, basketItems);
-            await BasketService.StoreBasket(changedBasket);
+            await BasketService.StoreBasket(changedBasket, token!);
         }
 
         protected decimal summary = 0;
@@ -102,7 +102,8 @@ namespace WebClient.Components.Pages.Customer
 
         protected async void ClearBasket()
         {
-            await BasketService.ClearBasket(customerId);
+            var token = await localStorage.GetItemAsync<string>("JWTToken");
+            await BasketService.ClearBasket(customerId, token!);
             NavigationManager.NavigateTo("/basket", true);
         }
 

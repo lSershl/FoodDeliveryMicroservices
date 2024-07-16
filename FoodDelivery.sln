@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.UnitTests", "tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "src\Services\Identity\Identity.csproj", "{34117ECE-70A1-44E5-8FC7-136040DB9578}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.UnitTests", "tests\Identity.UnitTests\Identity.UnitTests.csproj", "{19D8013C-61FD-4FA5-AB47-DE4250146BAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.UnitTests", "tests\Identity.UnitTests\Identity.UnitTests.csproj", "{19D8013C-61FD-4FA5-AB47-DE4250146BAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

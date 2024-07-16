@@ -29,7 +29,7 @@ namespace WebClient.Components.Pages
             {
                 var authState = await authStateTask;
                 var user = authState.User;
-                if (user is not null && user.Identity!.IsAuthenticated)
+                if (user.Identities.Any())
                 {
                     customerId = Guid.Parse(user.Claims.First(x => x.Type.Contains("userdata"))!.Value);
                     var token = await localStorage.GetItemAsync<string>("JWTToken");
@@ -53,6 +53,7 @@ namespace WebClient.Components.Pages
 
         protected async void AddToBasket(CatalogItemDto catalogItem)
         {
+            var token = await localStorage.GetItemAsync<string>("JWTToken");
             BasketItem newItem = new()
             {
                 ProductId = catalogItem.Id,
@@ -65,7 +66,7 @@ namespace WebClient.Components.Pages
             if (currentBasket.Items!.Count == 0)
             {
                 currentBasket.Items!.Add(newItem);
-                await BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items!));
+                await BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items!), token!);
             }
             else
             {
@@ -74,7 +75,7 @@ namespace WebClient.Components.Pages
                     currentBasket.Items!.Add(newItem);
                 else
                     currentBasket.Items.First(x => x.ProductId == newItem.ProductId).Quantity++;
-                await BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items));
+                await BasketService.StoreBasket(new CustomerBasketDto(currentBasket.CustomerId, currentBasket.Items), token!);
             }
         }
     }

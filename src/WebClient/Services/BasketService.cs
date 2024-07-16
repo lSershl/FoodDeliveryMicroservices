@@ -18,20 +18,27 @@ namespace WebClient.Services
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                 {
-                    return default!;
+                    return null!;
                 }
 
-                return await response.Content.ReadFromJsonAsync<CustomerBasketDto>();
+                //return await response.Content.ReadFromJsonAsync<CustomerBasketDto>();
+                var result = await response.Content.ReadAsStringAsync();
+                return Extensions.JSONSerializer.DeserializeJsonString<CustomerBasketDto>(result);
             }
             else
             {
+                if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
+                {
+                    return null!;
+                }
                 var message = await response.Content.ReadAsStringAsync();
                 throw new Exception(message);
             }
         }
 
-        public async Task<ServiceResponse> StoreBasket(CustomerBasketDto customerBasketDto)
+        public async Task<ServiceResponse> StoreBasket(CustomerBasketDto customerBasketDto, string token)
         {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.PostAsync($"{BaseUrl}", 
                 Extensions.JSONSerializer.GenerateStringContent(
                     Extensions.JSONSerializer.SerializeObj(customerBasketDto)));
@@ -47,8 +54,9 @@ namespace WebClient.Services
             }
         }
 
-        public async Task<ServiceResponse> ClearBasket(Guid customerId)
+        public async Task<ServiceResponse> ClearBasket(Guid customerId, string token)
         {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.DeleteAsync($"{BaseUrl}/{customerId}");
 
             if (response.IsSuccessStatusCode)
@@ -62,8 +70,9 @@ namespace WebClient.Services
             }
         }
 
-        public async Task<ServiceResponse> Checkout(Guid customerId, BasketCheckoutDto basketCheckoutDto)
+        public async Task<ServiceResponse> Checkout(Guid customerId, BasketCheckoutDto basketCheckoutDto, string token)
         {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.PostAsync($"{BaseUrl}/checkout/{customerId}",
                 Extensions.JSONSerializer.GenerateStringContent(
                     Extensions.JSONSerializer.SerializeObj(basketCheckoutDto)));

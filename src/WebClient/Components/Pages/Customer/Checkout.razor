@@ -1,0 +1,197 @@
+﻿@page "/checkout"
+@inherits CheckoutBase
+
+<h3 style="margin-left: 20px;">Подтверждение и оплата заказа</h3>
+
+<div class="h-100 d-flex flex-column align-items-left justify-content-left ">
+    <div class="row formStyle p-0">
+        <div class="col-12 col-md-8 p-1">
+            <div class="col-lg-12 col-md-8 p-4">
+                <h3>Сумма заказа: @totalPrice рублей</h3>
+            </div>
+            @if (step1)
+            {
+                <div class="col-8 col-md-8 p-4">
+                    <label class="form-label" for="saved_addresses">
+                        Сохранённые адреса
+                        <InputSelect class="form-select" id="saved_addresses" @bind-Value="checkoutModel.Address">
+                            <option selected disabled value="">Выберите адрес из списка...</option>
+                            @foreach (var item in savedAddresses)
+                            {
+                                <option value="@item.FullAddress">@item.FullAddress</option>
+                            }
+                        </InputSelect>
+                    </label>
+                    <button class="btn btn-primary" @onclick="ShowNewAddressWindow">Добавить адрес</button>
+                </div>
+                <div class="col-8 col-md-8 p-4">
+                    <label class="form-label" for="delivery_time">Время доставки</label>
+                    <InputSelect class="form-select" id="delivery_time" @bind-Value="checkoutModel.DeliveryTime">
+                        <option selected disabled value="">Выберите время доставки...</option>
+                        @foreach (var time in deliveryTimeList!)
+                        {
+                            <option selected value="@time">@time</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="col-8 col-md-8 p-4">
+                    <button class="btn btn-primary" @onclick="GoToStep2">Далее</button>
+                </div>
+                @if (addNewAddressWindow)
+                {
+                    <div class="modal" tabindex="-1" style="display:block;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Добавить новый адрес</h5>
+                                    <button type="button" class="btn btn-close" data-dismiss="modal" @onclick="CloseNewAddressWindow">
+                                        <span aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <EditForm Model="newAddress" OnValidSubmit="SaveNewAddress">
+                                    <div class="modal-body">
+                                        <DataAnnotationsValidator />
+                                        <div class="mb-3">
+                                            <InputText class="form-control" id="new_address_city" placeholder="Город" @bind-Value="newAddress.City" />
+                                            <ValidationMessage For="@(() => newAddress.City)" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <InputText class="form-control" id="new_address_street" placeholder="Улица" @bind-Value="newAddress.Street" />
+                                            <ValidationMessage For="@(() => newAddress.Street)" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <InputText class="form-control" id="new_address_house" placeholder="Дом" @bind-Value="newAddress.House" />
+                                            <ValidationMessage For="@(() => newAddress.House)" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <InputText class="form-control" id="new_address_apartment" placeholder="Квартира" @bind-Value="newAddress.Apartment" />
+                                            <ValidationMessage For="@(() => newAddress.Apartment)" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-dismiss="modal" @onclick="CloseNewAddressWindow">Отмена</button>
+                                        <button class="btn btn-primary" data-dismiss="modal" type="submit">Сохранить адрес</button>
+                                    </div>
+                                </EditForm>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            @if (step2)
+            {
+                <div class="col-8 col-md-8 p-4">
+                    <label class="form-label" for="saved_cards">
+                        Сохранённые карты
+                        <InputSelect class="form-select" id="saved_cards" @bind-Value="selectedCardId" @bind-Value:after="(() => SelectPaymentCard(selectedCardId))">
+                            <option selected disabled value="">Выберите карту из списка...</option>
+                            @foreach (var item in savedCards)
+                            {
+                                <option value="@item.Id" >@item.PartialCardNumber</option>
+                            }
+                        </InputSelect>
+                    </label>
+                    <button class="btn btn-primary" @onclick="ShowNewPaymentCardWindow">Добавить карту</button>
+                </div>
+                <div class="col-8 col-md-8 p-4">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" @onclick="GoToStep1">Назад</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" @onclick="GoToStep3">Далее</button>
+                        </div>
+                    </div>
+                </div>
+                @if (addNewPaymentCardWindow)
+                {
+                    <div class="modal" tabindex="-1" style="display:block;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Добавить новый адрес</h5>
+                                    <button type="button" class="btn btn-close" data-dismiss="modal" @onclick="CloseNewPaymentCardWindow">
+                                        <span aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <EditForm Model="newPaymentCard" OnValidSubmit="SaveNewPaymentCard">
+                                    <div class="modal-body">
+                                        <DataAnnotationsValidator />
+                                        <div class="mb-3">
+                                            <InputText class="form-control" id="new_card_number" placeholder="0000 0000 0000 0000" @bind-Value="newPaymentCard.CardNumber" />
+                                            <ValidationMessage For="@(() => newPaymentCard.CardNumber)" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <InputText class="form-control" id="new_address_street" placeholder="IVAN IVANOV" @bind-Value="newPaymentCard.CardHolderName" />
+                                            <ValidationMessage For="@(() => newPaymentCard.CardHolderName)" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <InputText class="form-control" id="new_address_house" placeholder="MM/YY" @bind-Value="newPaymentCard.Expiration" />
+                                            <ValidationMessage For="@(() => newPaymentCard.Expiration)" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <InputText class="form-control" id="new_address_apartment" placeholder="CVV" @bind-Value="newPaymentCard.Cvv" />
+                                            <ValidationMessage For="@(() => newPaymentCard.Cvv)" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-dismiss="modal" @onclick="CloseNewPaymentCardWindow">Отмена</button>
+                                        <button class="btn btn-primary" data-dismiss="modal" type="submit">Сохранить карту</button>
+                                    </div>
+                                </EditForm>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            @if (step3)
+            {
+                <div class="col-lg-12 col-md-8 p-4">
+                    <h4>Подтверждение заказа</h4>
+                    <div class="grid">
+                        @foreach (var item in basketItems)
+                        {
+                            <div class="grid-item">
+                                <div class="wrapper">
+                                    <div class="box header">
+                                        <label>@item.Name</label>
+                                    </div>
+                                    <div class="box sidebar">
+                                        <img style="max-height:200px; max-width:200px;" src="@item.PictureUrl" />
+                                    </div>
+                                    <div class="box content">
+                                        <label style="align-content:flex-start;">Цена: @item.Price руб</label>
+                                        <label style="align-content:flex-start;">Кол-во: @item.Quantity шт</label>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-8 col-md-8 p-4">
+                        <label>Адрес: @checkoutModel.Address</label>
+                    </div>
+                    <div class="col-8 col-md-8 p-4">
+                        <label>Время доставки: @checkoutModel.DeliveryTime</label>
+                    </div>
+                    <div class="col-8 col-md-8 p-4">
+                        <label class="form-label" for="email">
+                            Электронная почта (необязательно):
+                        </label>
+                        <InputText class="form-control" id="email" placeholder="Адрес эл. почты" @bind-Value="checkoutModel.Email" />
+                    </div>
+                    
+                </div>
+                <div class="col-8 col-md-8 p-4">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" @onclick="GoToStep2">Назад</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" @onclick="ConfirmCheckout">Подтвердить заказ</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

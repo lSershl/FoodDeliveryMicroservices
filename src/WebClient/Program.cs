@@ -23,6 +23,8 @@ builder.Services.AddScoped<RegisterService>();
 builder.Services.AddScoped<CatalogService>();
 builder.Services.AddScoped<BasketService>();
 builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<AddressService>();
+builder.Services.AddScoped<PaymentCardService>();
 
 var app = builder.Build();
 

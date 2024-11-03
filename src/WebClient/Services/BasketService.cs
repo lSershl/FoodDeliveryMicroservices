@@ -21,7 +21,6 @@ namespace WebClient.Services
                     return null!;
                 }
 
-                //return await response.Content.ReadFromJsonAsync<CustomerBasketDto>();
                 var result = await response.Content.ReadAsStringAsync();
                 return Extensions.JSONSerializer.DeserializeJsonString<CustomerBasketDto>(result);
             }

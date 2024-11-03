@@ -31,26 +31,6 @@ namespace WebClient.Services
             }
         }
 
-        //public async Task<PaymentCardInfo> GetCardInfo(Guid cardId, string token)
-        //{
-        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        //    var response = await _httpClient.GetAsync($"{BaseUrl}/id/{cardId}");
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
-        //        {
-        //            return default!;
-        //        }
-        //        var result = await response.Content.ReadAsStringAsync();
-        //        return Extensions.JSONSerializer.DeserializeJsonString<PaymentCardInfo>(result);
-        //    }
-        //    else
-        //    {
-        //        var message = await response.Content.ReadAsStringAsync();
-        //        throw new Exception(message);
-        //    }
-        //}
-
         public async Task<PaymentCardModel> GetCardDetails(Guid cardId, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

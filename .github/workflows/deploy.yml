@@ -1,39 +1,39 @@
-name: Deploy
-on:
-  workflow_run:
-    workflows: ["Build and test"]
-    branches: [ "master" ]
-    types: 
-      - completed
+# name: Deploy
+# on:
+#   workflow_run:
+#     workflows: ["Build and test"]
+#     branches: [ "master" ]
+#     types: 
+#       - completed
 
-jobs:
-  deploy:
-    name: Deploy project
-    permissions:
-      deployments: write
-    runs-on: ubuntu-latest
+# jobs:
+#   deploy:
+#     name: Deploy project
+#     permissions:
+#       deployments: write
+#     runs-on: ubuntu-latest
     
-    steps:
-      - name: Checkout Repository
-        uses: 'actions/checkout@v2'
-        with:
-          ref: master
-          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+#     steps:
+#       - name: Checkout Repository
+#         uses: 'actions/checkout@v2'
+#         with:
+#           ref: master
+#           token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
           
-      - name: Connect with VPS and deploy the app
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            if [ -d ".git" ]; then
-              git stash
-              git pull origin master
-            else
-              git clone -b master https://github.com/lSershl/FoodDeliveryMicroservices.git
-            fi
-            bash fdm_deploy.sh
-            cd FoodDeliveryMicroservices
-            docker compose up -d
+#       - name: Connect with VPS and deploy the app
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.VPS_IP }}
+#           username: ${{ secrets.VPS_USERNAME }}
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           port: ${{ secrets.SSH_PORT }}
+#           script: |
+#             if [ -d ".git" ]; then
+#               git stash
+#               git pull origin master
+#             else
+#               git clone -b master https://github.com/lSershl/FoodDeliveryMicroservices.git
+#             fi
+#             bash fdm_deploy.sh
+#             cd FoodDeliveryMicroservices
+#             docker compose up -d

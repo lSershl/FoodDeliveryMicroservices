@@ -1,6 +1,29 @@
-version: "1.25"
+version: "3.8"
 
 services:
+
+  webclient:
+    image: lsershl/fdm_web_client
+    container_name: web_client
+  yarpgateway:
+    image: lsershl/fdm_yarp_gateway
+    container_name: yarp_gateway
+  identity:
+    image: lsershl/fdm_identity
+    container_name: identity_service
+  catalog:
+    image: lsershl/fdm_catalog
+    container_name: catalog_service
+  basket:
+    image: lsershl/fdm_basket
+    container_name: basket_service
+  ordering:
+    image: lsershl/fdm_ordering
+    container_name: ordering_service
+  delivery:
+    image: lsershl/fdm_delivery
+    container_name: delivery_service
+
   mongo:
     image: mongo
     container_name: mongo

@@ -2,19 +2,20 @@
 using WebClient.Infrastructure;
 using WebClient.Models;
 using WebClient.Responses;
+using Extensions = WebClient.Infrastructure.Extensions;
 
 namespace WebClient.Services
 {
-    public class PaymentCardService(HttpClient httpClient)
+    public class PaymentCardService(IHttpClientFactory factory)
     {
-        private readonly HttpClient _httpClient = httpClient;
-
+        private readonly HttpClient client = factory.CreateClient("YARPGateway");
         private const string BaseUrl = "/identity-service/cards";
 
         public async Task<List<SavedPaymentCardDto>> GetSavedCards(Guid customerId, string token)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _httpClient.GetAsync($"{BaseUrl}/for_customer/{customerId}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.GetAsync($"{BaseUrl}/for_customer/{customerId}");
             if (response.IsSuccessStatusCode)
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
@@ -33,8 +34,9 @@ namespace WebClient.Services
 
         public async Task<PaymentCardModel> GetCardDetails(Guid cardId, string token)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _httpClient.GetAsync($"{BaseUrl}/id/{cardId}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.GetAsync($"{BaseUrl}/id/{cardId}");
             if (response.IsSuccessStatusCode)
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
@@ -53,8 +55,9 @@ namespace WebClient.Services
 
         public async Task<ServiceResponse> AddNewPaymentCard(NewPaymentCardDto newPaymentCardDto, string token)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _httpClient.PostAsync($"{BaseUrl}",
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.PostAsync($"{BaseUrl}",
                 Extensions.JSONSerializer.GenerateStringContent(
                     Extensions.JSONSerializer.SerializeObj(newPaymentCardDto)));
             if (response.IsSuccessStatusCode)

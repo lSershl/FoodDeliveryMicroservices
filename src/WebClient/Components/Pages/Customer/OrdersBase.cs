@@ -60,29 +60,35 @@ namespace WebClient.Components.Pages.Customer
                     var currentOrder = customerOrders.First();
                     if (currentOrder.Status == "Доставлен")
                         return;
-
-                    _connection = new HubConnectionBuilder()
+                    else
+                    {
+                        TimeSpan alivePeriod = TimeSpan.FromSeconds(10);
+                        _connection = new HubConnectionBuilder()
                         .WithUrl(BaseHubConnectionUrl)
+                        .WithAutomaticReconnect()
+                        .WithKeepAliveInterval(alivePeriod)
                         .Build();
 
-                    _connection.On<string>("OrderStatusUpdate", status =>
-                    {
-                        customerOrders.First(o => o.Id == currentOrder.Id).Status = status;
-                        InvokeAsync(StateHasChanged);
-                    });
+                        _connection.On<string>("OrderStatusUpdate", status =>
+                        {
+                            customerOrders.First(o => o.Id == currentOrder.Id).Status = status;
+                            InvokeAsync(StateHasChanged);
+                        });
 
-                    await _connection.StartAsync();
+                        await _connection.StartAsync();
 
-                    while (_connection.State == HubConnectionState.Connected)
-                    {
-                        await _connection!.SendAsync("GetOrderStatus", currentOrder.Id);
+                        while (_connection.State == HubConnectionState.Connected)
+                        {
+                            if (currentOrder.Status == "Доставлен")
+                                await _connection.StopAsync();
+                            await _connection!.InvokeAsync("GetOrderStatus", currentOrder.Id);
+                        }
                     }
-
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Console.WriteLine(ex.Message);
             }
             
         }

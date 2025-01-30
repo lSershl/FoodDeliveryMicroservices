@@ -3,15 +3,14 @@ using WebClient.Responses;
 
 namespace WebClient.Services
 {
-    public class RegisterService(HttpClient httpClient)
+    public class RegisterService(IHttpClientFactory factory)
     {
-        private readonly HttpClient _httpClient = httpClient;
-
+        private readonly HttpClient client = factory.CreateClient("YARPGateway");
         private const string BaseUrl = "/identity-service/account/register";
 
         public async Task<RegisterResponse> RegisterAsync(RegisterDto registerDto)
         {
-            var response = await _httpClient.PostAsJsonAsync($"{BaseUrl}", registerDto);
+            var response = await client.PostAsJsonAsync($"{BaseUrl}", registerDto);
             
             if (response.IsSuccessStatusCode)
             {

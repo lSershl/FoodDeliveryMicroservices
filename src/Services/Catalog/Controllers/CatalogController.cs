@@ -16,7 +16,7 @@ namespace Catalog.Controllers
         public async Task<ActionResult> GetCatalogAsync()
         {
             var items = (await _repository.GetAllAsync()).Select(a => a.AsDto());
-            if (items.Count() == 0)
+            if (items.Any() is false)
             {
                 var initialProductsList = _initialData.GetInitialData();
                 foreach (var product in initialProductsList)

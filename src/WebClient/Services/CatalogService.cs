@@ -1,16 +1,16 @@
 ﻿using WebClient.Infrastructure;
+using Extensions = WebClient.Infrastructure.Extensions;
 
 namespace WebClient.Services
 {
-    public class CatalogService(HttpClient httpClient)
+    public class CatalogService(IHttpClientFactory factory)
     {
-        private readonly HttpClient _httpClient = httpClient;
-
+        private readonly HttpClient client = factory.CreateClient("YARPGateway");
         private const string BaseUrl = "/catalog-service/catalog";
 
         public async Task<IEnumerable<CatalogItemDto>> GetCatalogItems()
         {
-            var response = await _httpClient.GetAsync(BaseUrl);
+            var response = await client.GetAsync(BaseUrl);
             if (response.IsSuccessStatusCode)
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.NoContent)

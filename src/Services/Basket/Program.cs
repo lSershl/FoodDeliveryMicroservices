@@ -6,12 +6,14 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Add services to the container.
 var serviceSettings = builder.Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(options =>
 {
-    var redisUrl = builder.Configuration.GetConnectionString("RedisConnection");
+    var redisUrl = builder.Configuration.GetConnectionString("fdm-redis-cache");
     return ConnectionMultiplexer.Connect(redisUrl!);
 });
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
@@ -22,7 +24,7 @@ builder.Services.AddMassTransit(x =>
     x.UsingRabbitMq((context, configurator) =>
     {
         var rabbitMqSettings = builder.Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
-        configurator.Host(rabbitMqSettings!.Host);
+        configurator.Host(builder.Configuration.GetConnectionString("fdm-rabbit-mq"));
         configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings!.ServiceName, false));
     });
 });
@@ -33,6 +35,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -18,7 +18,7 @@ namespace Catalog.MongoDb
                 var configuration = a.GetService<IConfiguration>();
                 var serviceSettings = configuration!.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
                 var mongoDbSettings = configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
-                var mongoClient = new MongoClient(mongoDbSettings!.ConnectionString);
+                var mongoClient = new MongoClient(configuration.GetConnectionString("fdm-mongo-db"));
                 return mongoClient.GetDatabase(serviceSettings!.ServiceName);
             });
             return services;

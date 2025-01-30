@@ -1,19 +1,20 @@
 ﻿using System.Net.Http.Headers;
 using WebClient.Infrastructure;
 using WebClient.Responses;
+using Extensions = WebClient.Infrastructure.Extensions;
 
 namespace WebClient.Services
 {
-    public class AddressService(HttpClient httpClient)
+    public class AddressService(IHttpClientFactory factory)
     {
-        private readonly HttpClient _httpClient = httpClient;
-
+        private readonly HttpClient client = factory.CreateClient("YARPGateway");
         private const string BaseUrl = "/identity-service/addresses";
 
         public async Task<List<SavedAddressDto>> GetSavedAddresses(Guid customerId, string token)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _httpClient.GetAsync($"{BaseUrl}/for_customer/{customerId}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.GetAsync($"{BaseUrl}/for_customer/{customerId}");
             if (response.IsSuccessStatusCode)
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
@@ -32,8 +33,9 @@ namespace WebClient.Services
 
         public async Task<ServiceResponse> AddNewAddress(NewAddressDto newAddressDto, string token)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _httpClient.PostAsync($"{BaseUrl}", 
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.PostAsync($"{BaseUrl}", 
                 Extensions.JSONSerializer.GenerateStringContent(
                     Extensions.JSONSerializer.SerializeObj(newAddressDto)));
             if (response.IsSuccessStatusCode)

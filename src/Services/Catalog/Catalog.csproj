@@ -15,4 +15,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\aspire\FoodDelivery.ServiceDefaults\FoodDelivery.ServiceDefaults.csproj" />
+  </ItemGroup>
+
 </Project>

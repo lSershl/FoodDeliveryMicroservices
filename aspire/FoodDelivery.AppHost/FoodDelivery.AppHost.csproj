@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>c7c2d44b-29a2-4902-9e59-4c4a27be6a9e</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.MongoDB" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ApiGateway\YARPGateway\YARPGateway.csproj" />
+    <ProjectReference Include="..\..\src\Services\Basket\Basket.csproj" />
+    <ProjectReference Include="..\..\src\Services\Catalog\Catalog.csproj" />
+    <ProjectReference Include="..\..\src\Services\Delivery\Delivery.csproj" />
+    <ProjectReference Include="..\..\src\Services\Identity.Migration\Identity.Migration.csproj" />
+    <ProjectReference Include="..\..\src\Services\Identity\Identity.csproj" />
+    <ProjectReference Include="..\..\src\Services\Ordering\Ordering.csproj" />
+    <ProjectReference Include="..\..\src\WebClient\WebClient.csproj" />
+  </ItemGroup>
+
+</Project>

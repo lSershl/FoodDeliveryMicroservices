@@ -7,6 +7,8 @@ using Yarp.ReverseProxy.Transforms;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
     .AddTransforms(builderContext =>
@@ -58,6 +60,8 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 app.UseRouting();
+
+app.MapDefaultEndpoints();
 
 app.UseRateLimiter();
 

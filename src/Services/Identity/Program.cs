@@ -6,10 +6,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddNpgsql<ApplicationDbContext>(builder.Configuration.GetConnectionString("IdentityDB"));
+builder.Services.AddNpgsql<ApplicationDbContext>(builder.Configuration.GetConnectionString("fdm-identity-db"));
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IPaymentCardRepository, PaymentCardRepository>();
@@ -35,6 +37,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -7,6 +7,8 @@ using Delivery.Processors;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Add services to the container
 builder.Services.AddMassTransit(x =>
 {
@@ -16,7 +18,7 @@ builder.Services.AddMassTransit(x =>
         var configuration = context.GetService<IConfiguration>();
         var serviceSettings = configuration!.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
         var rabbitMqSettings = configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
-        configurator.Host(rabbitMqSettings!.Host);
+        configurator.Host(builder.Configuration.GetConnectionString("fdm-rabbit-mq"));
         configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings!.ServiceName, false));
         configurator.UseMessageRetry(b =>
         {
@@ -35,6 +37,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

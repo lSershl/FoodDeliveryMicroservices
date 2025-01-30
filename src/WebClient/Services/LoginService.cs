@@ -3,15 +3,14 @@ using WebClient.Responses;
 
 namespace WebClient.Services
 {
-    public class LoginService(HttpClient httpClient)
+    public class LoginService(IHttpClientFactory factory)
     {
-        private readonly HttpClient _httpClient = httpClient;
-
+        private readonly HttpClient client = factory.CreateClient("YARPGateway");
         private const string BaseUrl = "/identity-service/account/login";
 
         public async Task<LoginResponse> LoginAsync(LoginDto loginDto)
         {
-            var response = await _httpClient.PostAsJsonAsync(BaseUrl, loginDto);
+            var response = await client.PostAsJsonAsync(BaseUrl, loginDto);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
@@ -22,7 +21,6 @@ namespace WebClient.Services
                 var message = await response.Content.ReadAsStringAsync();
                 return new LoginResponse(message, null!);
             }
-            
         }
     }
 }

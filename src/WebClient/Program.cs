@@ -6,13 +6,31 @@ using WebClient.States;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
+builder.Services.ConfigureHttpClientDefaults(http =>
+{
+    http.AddServiceDiscovery();
+});
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped(http => new HttpClient
+//builder.Services.AddScoped(http => new HttpClient
+//{
+//    BaseAddress = new Uri(builder.Configuration.GetSection("GatewayAddress").Value!)
+//});
+
+//builder.Services.AddScoped(sp => new HttpClient
+//{
+//    BaseAddress = new("https://yarp-gateway")
+//});
+
+builder.Services.AddHttpClient("YARPGateway", client =>
 {
-    BaseAddress = new Uri(builder.Configuration.GetSection("GatewayAddress").Value!)
+    client.BaseAddress = new Uri(builder.Configuration.GetSection("GatewayAddress").Value!);
+    //client.BaseAddress = new Uri("https://yarp-gateway");
 });
 
 
@@ -27,6 +45,8 @@ builder.Services.AddScoped<AddressService>();
 builder.Services.AddScoped<PaymentCardService>();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
